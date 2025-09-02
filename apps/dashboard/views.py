@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from apps.jobs.models import Job, Application
+from apps.jobs.models import Job, Application, JobBookmark, JobBrowseHistory
 from django.shortcuts import render
 
 def home(request):
@@ -38,9 +38,30 @@ def job_seeker_dashboard(request):
         job_seeker=request.user.jobseeker
     ).order_by('-applied_date')
     
+    bookmarks = JobBookmark.objects.filter(
+        job_seeker=request.user.jobseeker
+    ).order_by('-created_date')
+    
+    # 获取浏览历史，去重并限制数量
+    browse_history = JobBrowseHistory.objects.filter(
+        job_seeker=request.user.jobseeker
+    ).select_related('job').order_by('-browsed_date')[:20]  # 限制显示最近20条
+    
+    # 去重处理，只显示每个职位最近一次浏览
+    seen_jobs = set()
+    unique_browse_history = []
+    for history in browse_history:
+        if history.job.id not in seen_jobs:
+            unique_browse_history.append(history)
+            seen_jobs.add(history.job.id)
+    
     context = {
         'applications': applications,
+        'bookmarks': bookmarks,
+        'browse_history': unique_browse_history,
         'total_applications': applications.count(),
+        'total_bookmarks': bookmarks.count(),
+        'total_browse_history': len(unique_browse_history),
         'pending_applications': applications.filter(status='pending').count(),
         'accepted_applications': applications.filter(status='accepted').count(),
     }
@@ -93,5 +114,23 @@ def withdraw_application(request, application_id):
         
         application.delete()
         messages.success(request, "Application withdrawn successfully!")
+    
+    return redirect('dashboard:jobseeker_dashboard')
+
+@login_required
+def clear_browse_history(request):
+    """
+    清除求职者的浏览历史
+    """
+    if not request.user.is_job_seeker:
+        messages.error(request, "Access denied. Job seeker account required.")
+        return redirect('jobs:home')
+    
+    if request.method == 'POST':
+        try:
+            JobBrowseHistory.objects.filter(job_seeker=request.user.jobseeker).delete()
+            messages.success(request, "浏览历史已清除")
+        except Exception as e:
+            messages.error(request, "清除浏览历史时发生错误")
     
     return redirect('dashboard:jobseeker_dashboard')

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Create Job Seeker Account - Job Portal{% endblock %}
+{% block title %}创建求职者账户 - 招聘平台{% endblock %}
 
 {% block content %}
 <div class="min-h-screen flex items-center justify-center bg-gray-50/50 p-4 sm:p-6 lg:p-8">
@@ -13,18 +13,18 @@
         <h2 class="text-3xl font-bold mb-8 text-center
                    bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 
                    text-transparent bg-clip-text animate-gradient-x">
-            Create Job Seeker Account
+            创建求职者账户
         </h2>
 
         <!-- Password Requirements Info -->
         <div class="mb-6 p-4 bg-blue-50 rounded-lg text-sm text-blue-700">
-            <h3 class="font-medium mb-2">Password Requirements:</h3>
+            <h3 class="font-medium mb-2">密码要求：</h3>
             <ul class="list-disc list-inside space-y-1">
-                <li>At least 8 characters long</li>
-                <li>Must contain at least one uppercase letter</li>
-                <li>Must contain at least one number</li>
-                <li>Must contain at least one special character</li>
-                <li>Cannot be too similar to your username or email</li>
+                <li>至少8个字符</li>
+                <li>必须包含至少一个大写字母</li>
+                <li>必须包含至少一个数字</li>
+                <li>必须包含至少一个特殊字符</li>
+                <li>不能与用户名或邮箱过于相似</li>
             </ul>
         </div>
         
@@ -51,7 +51,7 @@
                         <input type="text" 
                                name="{{ field.name }}"
                                id="{{ field.id_for_label }}"
-                               placeholder="Choose a username"
+                               placeholder="选择用户名"
                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm
                                       focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all
                                       group-hover:border-purple-400"
@@ -60,7 +60,7 @@
                         <input type="password" 
                                name="{{ field.name }}"
                                id="{{ field.id_for_label }}"
-                               placeholder="Enter your password"
+                               placeholder="输入密码"
                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm
                                       focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all
                                       group-hover:border-purple-400"
@@ -69,7 +69,7 @@
                         <input type="password" 
                                name="{{ field.name }}"
                                id="{{ field.id_for_label }}"
-                               placeholder="Confirm your password"
+                               placeholder="确认密码"
                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm
                                       focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all
                                       group-hover:border-purple-400"
@@ -77,7 +77,7 @@
                     {% elif field.name == 'skills' %}
                         <textarea name="{{ field.name }}"
                                   id="{{ field.id_for_label }}"
-                                  placeholder="List your key skills (e.g., Python, JavaScript, Project Management)"
+                                  placeholder="列出您的核心技能（如：Python、JavaScript、项目管理）"
                                   class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm
                                          focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all
                                          group-hover:border-purple-400"
@@ -85,7 +85,7 @@
                     {% elif field.name == 'experience' %}
                         <textarea name="{{ field.name }}"
                                   id="{{ field.id_for_label }}"
-                                  placeholder="Describe your work experience"
+                                  placeholder="描述您的工作经验"
                                   class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm
                                          focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all
                                          group-hover:border-purple-400"
@@ -93,7 +93,7 @@
                     {% elif field.name == 'education' %}
                         <textarea name="{{ field.name }}"
                                   id="{{ field.id_for_label }}"
-                                  placeholder="List your educational background"
+                                  placeholder="列出您的教育背景"
                                   class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm
                                          focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all
                                          group-hover:border-purple-400"
@@ -124,16 +124,16 @@
                                transform hover:scale-[1.02] transition-all duration-200
                                hover:shadow-lg hover:shadow-purple-500/25
                                animate-gradient-x">
-                    Create Job Seeker Account
+                    创建求职者账户
                 </button>
             </div>
         </form>
 
         <p class="mt-6 text-center text-sm text-gray-600">
-            Already have an account? 
+            已有账户？ 
             <a href="{% url 'accounts:login' %}" 
                class="text-purple-600 hover:text-pink-600 transition-colors hover:underline">
-                Sign in
+                登录
             </a>
         </p>
     </div>

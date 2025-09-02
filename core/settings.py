@@ -5,7 +5,7 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-change-me')
-DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() == 'true'
+DEBUG = os.getenv('DJANGO_DEBUG', 'True').lower() == 'true'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
 INSTALLED_APPS = [
@@ -73,3 +73,9 @@ USE_TZ = True
 
 LOGIN_REDIRECT_URL = 'dashboard:employer_dashboard'
 LOGOUT_REDIRECT_URL = 'home'
+
+# CSRF settings for development
+CSRF_TRUSTED_ORIGINS = [
+    'https://work-1-pqapjffzcegkiujq.prod-runtime.all-hands.dev',
+    'https://work-2-pqapjffzcegkiujq.prod-runtime.all-hands.dev',
+]

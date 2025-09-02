@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Find Jobs - JobPortal{% endblock %}
+{% block title %}职位搜索 - 招聘平台{% endblock %}
 
 {% block content %}
 <main class="pt-16">
@@ -18,7 +18,7 @@
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                             <i class="fas fa-search"></i>
                         </span>
-                        <input type="text" name="search" placeholder="Job title or keyword" 
+                        <input type="text" name="search" placeholder="职位名称或关键词" 
                                value="{{ request.GET.search }}"
                                class="w-full pl-12 pr-4 py-3 bg-white/10 backdrop-blur rounded-md border border-gray-700 text-white
                                       focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300
@@ -29,7 +29,7 @@
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                             <i class="fas fa-location-dot"></i>
                         </span>
-                        <input type="text" name="location" placeholder="Location" 
+                        <input type="text" name="location" placeholder="城市/地区" 
                                value="{{ request.GET.location }}"
                                class="w-full pl-12 pr-4 py-3 bg-white/10 backdrop-blur rounded-md border border-gray-700 text-white
                                       focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300
@@ -40,7 +40,7 @@
                             class="px-8 py-3 bg-black text-white rounded-md border border-gray-700
                                    hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] hover:border-blue-500/50
                                    transition-all duration-300 transform hover:-translate-y-0.5">
-                        Search
+                        搜索
                     </button>
                 </form>
             </div>
@@ -54,11 +54,11 @@
                                    focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500
                                    hover:shadow-[0_0_15px_rgba(59,130,246,0.3)]
                                    transition-all duration-300">
-                        <option value="" class="bg-gray-800 text-white">All Job Types</option>
-                        <option value="full_time" class="bg-gray-800 text-white">Full Time</option>
-                        <option value="part_time" class="bg-gray-800 text-white">Part Time</option>
-                        <option value="contract" class="bg-gray-800 text-white">Contract</option>
-                        <option value="internship" class="bg-gray-800 text-white">Internship</option>
+                        <option value="" class="bg-gray-800 text-white">所有工作类型</option>
+                        <option value="full_time" class="bg-gray-800 text-white">全职</option>
+                        <option value="part_time" class="bg-gray-800 text-white">兼职</option>
+                        <option value="contract" class="bg-gray-800 text-white">合同工</option>
+                        <option value="internship" class="bg-gray-800 text-white">实习</option>
                     </select>
                     <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none flex items-center gap-2
                                 group-hover:text-blue-400 transition-colors duration-300">
@@ -73,10 +73,10 @@
                                    focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500
                                    hover:shadow-[0_0_15px_rgba(147,51,234,0.3)]
                                    transition-all duration-300">
-                        <option value="" class="bg-gray-800 text-white">Experience Level</option>
-                        <option value="entry" class="bg-gray-800 text-white">Entry Level</option>
-                        <option value="mid" class="bg-gray-800 text-white">Mid Level</option>
-                        <option value="senior" class="bg-gray-800 text-white">Senior Level</option>
+                        <option value="" class="bg-gray-800 text-white">经验水平</option>
+                        <option value="entry" class="bg-gray-800 text-white">入门级</option>
+                        <option value="mid" class="bg-gray-800 text-white">中级</option>
+                        <option value="senior" class="bg-gray-800 text-white">高级</option>
                     </select>
                     <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none flex items-center gap-2
                                 group-hover:text-purple-400 transition-colors duration-300">
@@ -91,11 +91,11 @@
                                    focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500
                                    hover:shadow-[0_0_15px_rgba(236,72,153,0.3)]
                                    transition-all duration-300">
-                        <option value="" class="bg-gray-800 text-white">Salary Range</option>
-                        <option value="0-30000" class="bg-gray-800 text-white">$0 - $30,000</option>
-                        <option value="30000-60000" class="bg-gray-800 text-white">$30,000 - $60,000</option>
-                        <option value="60000-90000" class="bg-gray-800 text-white">$60,000 - $90,000</option>
-                        <option value="90000+" class="bg-gray-800 text-white">$90,000+</option>
+                        <option value="" class="bg-gray-800 text-white">薪资范围</option>
+                        <option value="0-30000" class="bg-gray-800 text-white">¥0 - ¥30,000</option>
+                        <option value="30000-60000" class="bg-gray-800 text-white">¥30,000 - ¥60,000</option>
+                        <option value="60000-90000" class="bg-gray-800 text-white">¥60,000 - ¥90,000</option>
+                        <option value="90000+" class="bg-gray-800 text-white">¥90,000+</option>
                     </select>
                     <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none flex items-center gap-2
                                 group-hover:text-pink-400 transition-colors duration-300">
@@ -108,7 +108,7 @@
                                hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] hover:bg-blue-700
                                transition-all duration-300 flex items-center gap-2">
                     <i class="fas fa-filter"></i>
-                    Apply Filters
+                    应用筛选
                 </button>
             </div>
         </div>
@@ -119,10 +119,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Results Count -->
             <div class="mb-6 flex justify-between items-center">
-                <h2 class="text-xl font-semibold text-gray-900">{{ jobs.count }} Jobs Found</h2>
+                <h2 class="text-xl font-semibold text-gray-900">找到 {{ jobs.count }} 个职位</h2>
                 <select class="border border-gray-300 rounded-md px-3 py-1.5">
-                    <option>Most Recent</option>
-                    <option>Most Relevant</option>
+                    <option>最新发布</option>
+                    <option>最相关</option>
                 </select>
             </div>
 
@@ -163,7 +163,7 @@
                         <!-- Posted Time -->
                         <div class="flex items-center group-hover:text-gray-800">
                             <i class="fas fa-calendar-alt w-5 text-gray-400 group-hover:text-blue-500 transition-colors"></i>
-                            {{ job.posted_date|timesince }} ago
+                            {{ job.posted_date|timesince }}前
                         </div>
                     </div>
 
@@ -176,14 +176,14 @@
                     <div class="flex justify-end">
                         <a href="{% url 'jobs:job_detail' job.id %}" 
                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transform hover:scale-105 transition-all duration-300">
-                            View Details
+                            查看详情
                             <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                         </a>
                     </div>
                 </div>
                 {% empty %}
                 <div class="col-span-full text-center py-12">
-                    <div class="text-gray-500">No jobs found matching your criteria.</div>
+                    <div class="text-gray-500">没有找到符合条件的职位。</div>
                 </div>
                 {% endfor %}
             </div>

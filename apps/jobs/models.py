@@ -58,3 +58,37 @@ class Application(models.Model):
 
     def __str__(self):
         return f"{self.job_seeker.user.username} - {self.job.title}"
+
+class JobBookmark(models.Model):
+    """
+    Model to handle job bookmarks/favorites for job seekers
+    """
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='bookmarks')
+    job_seeker = models.ForeignKey(JobSeeker, on_delete=models.CASCADE, related_name='bookmarks')
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('job', 'job_seeker')
+        ordering = ['-created_date']
+
+    def __str__(self):
+        return f"{self.job_seeker.user.username} - {self.job.title} (收藏)"
+
+class JobBrowseHistory(models.Model):
+    """
+    Model to track job browsing history for job seekers
+    """
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='browse_history')
+    job_seeker = models.ForeignKey(JobSeeker, on_delete=models.CASCADE, related_name='browse_history')
+    browsed_date = models.DateTimeField(auto_now_add=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ['-browsed_date']
+        indexes = [
+            models.Index(fields=['job_seeker', '-browsed_date']),
+        ]
+
+    def __str__(self):
+        return f"{self.job_seeker.user.username} - {self.job.title} (浏览于 {self.browsed_date.strftime('%Y-%m-%d %H:%M')})"

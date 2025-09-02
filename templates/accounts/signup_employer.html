@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Create Employer Account - Job Portal{% endblock %}
+{% block title %}创建雇主账户 - 招聘平台{% endblock %}
 
 {% block content %}
 <div class="min-h-screen flex items-center justify-center bg-gray-50/50 p-4 sm:p-6 lg:p-8">
@@ -13,17 +13,17 @@
         <h2 class="text-3xl font-bold mb-8 text-center
                    bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 
                    text-transparent bg-clip-text animate-gradient-x">
-            Create Employer Account
+            创建雇主账户
         </h2>
 
         <!-- Password Requirements Info -->
         <div class="mb-6 p-4 bg-blue-50 rounded-lg text-sm text-blue-700">
-            <h3 class="font-medium mb-2">Password Requirements:</h3>
+            <h3 class="font-medium mb-2">密码要求：</h3>
             <ul class="list-disc list-inside space-y-1">
-                <li>At least 8 characters long</li>
-                <li>Must contain at least one uppercase letter</li>
-                <li>Must contain at least one number</li>
-                <li>Must contain at least one special character</li>
+                <li>至少8个字符</li>
+                <li>必须包含至少一个大写字母</li>
+                <li>必须包含至少一个数字</li>
+                <li>必须包含至少一个特殊字符</li>
             </ul>
         </div>
         
@@ -32,7 +32,7 @@
             
             <!-- Username -->
             <div class="space-y-1">
-                <label for="id_username" class="block text-sm font-medium text-gray-700">Username</label>
+                <label for="id_username" class="block text-sm font-medium text-gray-700">用户名</label>
                 <input type="text" name="username" id="id_username" required
                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm
                               focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all
@@ -41,7 +41,7 @@
 
             <!-- Email -->
             <div class="space-y-1">
-                <label for="id_email" class="block text-sm font-medium text-gray-700">Email address</label>
+                <label for="id_email" class="block text-sm font-medium text-gray-700">邮箱地址</label>
                 <input type="email" name="email" id="id_email" required
                        placeholder="company@example.com"
                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm
@@ -51,7 +51,7 @@
 
             <!-- Password -->
             <div class="space-y-1">
-                <label for="id_password1" class="block text-sm font-medium text-gray-700">Password</label>
+                <label for="id_password1" class="block text-sm font-medium text-gray-700">密码</label>
                 <input type="password" name="password1" id="id_password1" required
                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm
                               focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all
@@ -60,7 +60,7 @@
 
             <!-- Password Confirmation -->
             <div class="space-y-1">
-                <label for="id_password2" class="block text-sm font-medium text-gray-700">Password confirmation</label>
+                <label for="id_password2" class="block text-sm font-medium text-gray-700">确认密码</label>
                 <input type="password" name="password2" id="id_password2" required
                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm
                               focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all
@@ -69,7 +69,7 @@
 
             <!-- Company Name -->
             <div class="space-y-1">
-                <label for="id_company_name" class="block text-sm font-medium text-gray-700">Company name</label>
+                <label for="id_company_name" class="block text-sm font-medium text-gray-700">公司名称</label>
                 <input type="text" name="company_name" id="id_company_name" required
                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm
                               focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all
@@ -78,7 +78,7 @@
 
             <!-- Company Description -->
             <div class="space-y-1">
-                <label for="id_company_description" class="block text-sm font-medium text-gray-700">Company description</label>
+                <label for="id_company_description" class="block text-sm font-medium text-gray-700">公司描述</label>
                 <textarea name="company_description" id="id_company_description" rows="4" required
                           class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm
                                  focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all
@@ -92,15 +92,15 @@
                            transform hover:scale-[1.02] transition-all duration-200
                            hover:shadow-lg hover:shadow-blue-500/25
                            animate-gradient-x">
-                Create Employer Account
+                创建雇主账户
             </button>
         </form>
 
         <p class="mt-6 text-center text-sm text-gray-600">
-            Already have an account? 
+            已有账户？ 
             <a href="{% url 'accounts:login' %}" 
                class="text-blue-600 hover:text-purple-600 transition-colors hover:underline">
-                Sign in
+                登录
             </a>
         </p>
     </div>

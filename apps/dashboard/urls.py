@@ -9,4 +9,5 @@ urlpatterns = [
     path('jobseeker/', views.job_seeker_dashboard, name='jobseeker_dashboard'),
     path('application/<int:application_id>/edit/', views.edit_application, name='edit_application'),
     path('application/<int:application_id>/withdraw/', views.withdraw_application, name='withdraw_application'),
+    path('clear-browse-history/', views.clear_browse_history, name='clear_browse_history'),
 ]

@@ -15,10 +15,10 @@
         <!-- Enhanced Title Section -->
         <div class="text-center mb-12">
             <h2 class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent pb-4">
-                Featured Companies
+                精选企业
             </h2>
             <p class="text-gray-600 text-lg mt-4 max-w-2xl mx-auto">
-                Discover opportunities with leading companies actively hiring
+                发现正在积极招聘的领先企业的机会
             </p>
         </div>
         
@@ -41,7 +41,7 @@
                             {{ company.company_name }}
                         </h3>
                         <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-50 text-blue-600 mt-2">
-                            {{ company.job_count }} Active Jobs
+                            {{ company.job_count }} 个在招职位
                         </div>
                     </div>
                 </div>
@@ -55,12 +55,12 @@
                     <a href="{% url 'jobs:company_detail' company.id %}" 
                        class="flex-1 inline-flex items-center justify-center px-4 py-2 bg-white border border-blue-500 text-blue-600 rounded-lg font-medium 
                               hover:bg-blue-50 transition-all duration-300">
-                        <i class="fas fa-building mr-2"></i> Details
+                        <i class="fas fa-building mr-2"></i> 详情
                     </a>
                     <a href="{% url 'jobs:job_list' %}?company={{ company.id }}" 
                        class="flex-1 inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg font-medium 
                               hover:from-blue-600 hover:to-indigo-700 transition-all duration-300">
-                        <i class="fas fa-briefcase mr-2"></i> View Jobs
+                        <i class="fas fa-briefcase mr-2"></i> 查看职位
                     </a>
                 </div>
             </div>
@@ -71,7 +71,7 @@
         {% if not companies %}
         <div class="text-center py-12">
             <div class="text-gray-500 text-lg">
-                No companies registered yet.
+                暂无注册企业。
             </div>
         </div>
         {% endif %}

@@ -9,11 +9,11 @@
             <!-- Filters Sidebar -->
             <div class="lg:col-span-1">
                 <div class="bg-white rounded-xl shadow-sm p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Filters</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">筛选条件</h3>
                     <form method="GET" action="{% url 'jobs:job_list' %}" class="space-y-6">
                         <!-- Job Type Filter -->
                         <div>
-                            <h4 class="font-medium text-gray-900 mb-3">Job Type</h4>
+                            <h4 class="font-medium text-gray-900 mb-3">工作类型</h4>
                             <div class="space-y-2">
                                 {% for value, label in job_types %}
                                 <label class="flex items-center">
@@ -28,9 +28,9 @@
 
                         <!-- Category Filter -->
                         <div>
-                            <h4 class="font-medium text-gray-900 mb-3">Categories</h4>
+                            <h4 class="font-medium text-gray-900 mb-3">职位类别</h4>
                             <select name="category" class="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">All Categories</option>
+                                <option value="">所有类别</option>
                                 {% for category in categories %}
                                 <option value="{{ category.id }}" 
                                         {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>
@@ -42,22 +42,22 @@
 
                         <!-- Location Filter -->
                         <div>
-                            <h4 class="font-medium text-gray-900 mb-3">Location</h4>
+                            <h4 class="font-medium text-gray-900 mb-3">工作地点</h4>
                             <input type="text" name="location" value="{{ selected_location }}"
-                                   placeholder="Enter location"
+                                   placeholder="输入地点"
                                    class="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500">
                         </div>
 
                         <!-- Apply Filters Button -->
                         <button type="submit" 
                                 class="w-full bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 transition-colors">
-                            Apply Filters
+                            应用筛选
                         </button>
 
                         <!-- Clear Filters -->
                         <a href="{% url 'jobs:job_list' %}" 
                            class="block text-center text-sm text-blue-600 hover:text-blue-700">
-                            Clear all filters
+                            清除所有筛选
                         </a>
                     </form>
                 </div>
@@ -69,11 +69,11 @@
                 <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
                     <form method="GET" action="{% url 'jobs:job_list' %}" class="flex flex-col md:flex-row gap-4">
                         <input type="text" name="search" value="{{ search_query }}"
-                               placeholder="Job title or keyword" 
+                               placeholder="职位名称或关键词" 
                                class="flex-1 rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500">
                         <button type="submit" 
                                 class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                            Search
+                            搜索
                         </button>
                     </form>
                 </div>
@@ -84,12 +84,12 @@
                     <div class="flex flex-wrap gap-2">
                         {% if search_query %}
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-50 text-blue-600">
-                            Search: {{ search_query }}
+                            搜索: {{ search_query }}
                         </span>
                         {% endif %}
                         {% if selected_location %}
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-50 text-blue-600">
-                            Location: {{ selected_location }}
+                            地点: {{ selected_location }}
                         </span>
                         {% endif %}
                         {% for job_type in selected_job_types %}
@@ -99,7 +99,7 @@
                         {% endfor %}
                         {% if selected_category_name %}
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-50 text-blue-600">
-                            Category: {{ selected_category_name }}
+                            类别: {{ selected_category_name }}
                         </span>
                         {% endif %}
                     </div>
@@ -130,14 +130,14 @@
                             </div>
                             <a href="{% url 'jobs:job_detail' job.id %}" 
                                class="inline-flex items-center text-blue-600 hover:text-blue-700">
-                                View Details
+                                查看详情
                                 <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
                     </div>
                     {% empty %}
                     <div class="text-center py-12 bg-white rounded-xl">
-                        <p class="text-gray-500">No jobs found matching your criteria.</p>
+                        <p class="text-gray-500">没有找到符合条件的职位。</p>
                     </div>
                     {% endfor %}
                 </div>
@@ -149,18 +149,18 @@
                         {% if page_obj.has_previous %}
                         <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}"
                            class="px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
-                            Previous
+                            上一页
                         </a>
                         {% endif %}
                         
                         <span class="px-4 py-2 bg-white text-gray-600 rounded-lg">
-                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                            第 {{ page_obj.number }} 页，共 {{ page_obj.paginator.num_pages }} 页
                         </span>
 
                         {% if page_obj.has_next %}
                         <a href="?page={{ page_obj.next_page_number }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}"
                            class="px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
-                            Next
+                            下一页
                         </a>
                         {% endif %}
                     </div>

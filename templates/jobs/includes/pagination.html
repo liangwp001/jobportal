@@ -6,7 +6,7 @@
             <li>
                 <a href="?page={{ jobs.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" 
                    class="px-3 py-2 rounded-md bg-white text-gray-600 hover:bg-gray-50 border border-gray-200">
-                    Previous
+                    上一页
                 </a>
             </li>
             {% endif %}
@@ -32,7 +32,7 @@
             <li>
                 <a href="?page={{ jobs.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" 
                    class="px-3 py-2 rounded-md bg-white text-gray-600 hover:bg-gray-50 border border-gray-200">
-                    Next
+                    下一页
                 </a>
             </li>
             {% endif %}

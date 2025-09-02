@@ -36,7 +36,7 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
         <h2 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 text-center mb-8">
-            Browse by Category
+            按类别浏览
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {% for category in categories %}
@@ -63,7 +63,7 @@
                         </h3>
                         <span class="inline-flex items-center px-4 py-1 rounded-full text-sm font-medium
                                    bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-colors">
-                            {{ category.job_count }} Jobs Available
+                            {{ category.job_count }} 个职位
                         </span>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
     <script>
         function checkJobAvailability(categoryId, jobCount, categoryName) {
             if (jobCount === 0) {
-                alert(`No jobs available in ${categoryName} category at the moment.`);
+                alert(`${categoryName} 类别暂时没有可用职位。`);
             } else {
                 window.location.href = `{% url 'jobs:job_list' %}?category=${categoryId}`;
             }

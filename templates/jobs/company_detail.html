@@ -26,13 +26,13 @@
                     <div class="flex flex-wrap gap-4">
                         <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
                             <i class="fas fa-briefcase mr-2"></i>
-                            {{ job_count }} Active Position{{ job_count|pluralize }}
+                            {{ job_count }} 个在招职位
                         </span>
                         {% if company.company_website %}
                             <a href="{{ company.company_website }}" 
                                target="_blank"
                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-50 text-gray-600 hover:bg-gray-100">
-                                <i class="fas fa-globe mr-2"></i> Website
+                                <i class="fas fa-globe mr-2"></i> 官网
                             </a>
                         {% endif %}
                     </div>
@@ -46,7 +46,7 @@
             <div class="lg:col-span-2 space-y-8">
                 <!-- About Section -->
                 <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4">About {{ company.company_name }}</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">关于 {{ company.company_name }}</h2>
                     <div class="prose max-w-none text-gray-600">
                         {{ company.company_description|linebreaks }}
                     </div>
@@ -54,7 +54,7 @@
 
                 <!-- Active Jobs Section -->
                 <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Open Positions</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">在招职位</h2>
                     <div class="space-y-4">
                         {% for job in active_jobs %}
                         <div class="border border-gray-100 rounded-lg p-4 hover:border-blue-200 transition-colors duration-300">
@@ -72,13 +72,13 @@
                                 </div>
                                 <a href="{% url 'jobs:job_detail' job.id %}" 
                                    class="inline-flex items-center text-blue-600 hover:text-blue-700">
-                                    View Details
+                                    查看详情
                                     <i class="fas fa-arrow-right ml-2"></i>
                                 </a>
                             </div>
                         </div>
                         {% empty %}
-                        <p class="text-gray-500 text-center py-4">No active jobs at the moment.</p>
+                        <p class="text-gray-500 text-center py-4">暂无在招职位。</p>
                         {% endfor %}
                     </div>
                 </div>
@@ -88,15 +88,15 @@
             <div class="space-y-8">
                 <!-- Company Stats -->
                 <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Company Overview</h2>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">企业概览</h2>
                     <div class="space-y-4">
                         <div class="flex justify-between items-center">
-                            <span class="text-gray-600">Active Jobs</span>
+                            <span class="text-gray-600">在招职位</span>
                             <span class="font-semibold text-gray-900">{{ company.job_count }}</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-gray-600">Member Since</span>
-                            <span class="font-semibold text-gray-900">{{ company.user.date_joined|date:"F Y" }}</span>
+                            <span class="text-gray-600">注册时间</span>
+                            <span class="font-semibold text-gray-900">{{ company.user.date_joined|date:"Y年m月" }}</span>
                         </div>
                     </div>
                 </div>
@@ -104,7 +104,7 @@
                 <!-- Contact Information -->
                 {% if company.contact_email or company.contact_phone %}
                 <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Contact Information</h2>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">联系信息</h2>
                     <div class="space-y-4">
                         {% if company.contact_email %}
                         <div class="flex items-center">
