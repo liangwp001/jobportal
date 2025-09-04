@@ -79,3 +79,17 @@ CSRF_TRUSTED_ORIGINS = [
     'https://work-1-pqapjffzcegkiujq.prod-runtime.all-hands.dev',
     'https://work-2-pqapjffzcegkiujq.prod-runtime.all-hands.dev',
 ]
+
+# 邮箱配置
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.163.com'  # 163邮箱SMTP服务器
+EMAIL_PORT = 25
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'kaobianai@163.com')  # 发送邮件的邮箱
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'YUbptDNpBviHBhZ4')  # 邮箱授权码
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# 验证码设置
+VERIFICATION_CODE_LENGTH = 6
+VERIFICATION_CODE_EXPIRE_MINUTES = 10
+VERIFICATION_MAX_ATTEMPTS = 5

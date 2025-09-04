@@ -17,11 +17,11 @@
         </h2>
 
         <div class="space-y-4 sm:space-y-6">
-            <!-- Job Seeker Card -->
+            <!-- Job Seeker Card - Only option available -->
             <a href="{% url 'accounts:jobseeker_signup' %}" 
-               class="block p-4 sm:p-6 rounded-lg border-2 border-transparent bg-gradient-to-r from-blue-50 to-purple-50
-                      hover:border-blue-500/20 transition-all duration-300 transform hover:scale-[1.02]
-                      hover:shadow-lg hover:shadow-blue-500/10">
+               class="block p-4 sm:p-6 rounded-lg border-2 border-blue-500/30 bg-gradient-to-r from-blue-50 to-purple-50
+                      hover:border-blue-500/50 transition-all duration-300 transform hover:scale-[1.02]
+                      hover:shadow-lg hover:shadow-blue-500/20">
                 <div class="flex items-center space-x-3 sm:space-x-4">
                     <div class="p-2 sm:p-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg shrink-0">
                         <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -32,25 +32,6 @@
                     <div>
                         <h3 class="text-base sm:text-lg font-semibold text-gray-900">注册为求职者</h3>
                         <p class="text-xs sm:text-sm text-gray-600 mt-0.5 sm:mt-1">寻找理想工作，与雇主建立联系</p>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Employer Card -->
-            <a href="{% url 'accounts:employer_signup' %}" 
-               class="block p-4 sm:p-6 rounded-lg border-2 border-transparent bg-gradient-to-r from-purple-50 to-pink-50
-                      hover:border-purple-500/20 transition-all duration-300 transform hover:scale-[1.02]
-                      hover:shadow-lg hover:shadow-purple-500/10">
-                <div class="flex items-center space-x-3 sm:space-x-4">
-                    <div class="p-2 sm:p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg shrink-0">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-base sm:text-lg font-semibold text-gray-900">注册为雇主</h3>
-                        <p class="text-xs sm:text-sm text-gray-600 mt-0.5 sm:mt-1">发布职位，寻找完美候选人</p>
                     </div>
                 </div>
             </a>

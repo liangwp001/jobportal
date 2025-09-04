@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}个人中心 - 招聘平台{% endblock %}
 
@@ -6,6 +7,75 @@
 {% csrf_token %}
 <main class="pt-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Welcome Header with Avatar -->
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl shadow-lg p-6 md:p-8 mb-8 text-white">
+            <div class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
+                <!-- Avatar -->
+                <div class="flex-shrink-0">
+                    <a href="{% url 'accounts:user_profile' %}" class="block group">
+                        <div class="relative">
+                            {% if user.profile_picture %}
+                                <img src="{{ user.profile_picture.url }}" 
+                                     alt="用户头像"
+                                     class="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border-4 border-white/30 shadow-lg group-hover:border-white/50 transition-all duration-300 group-hover:scale-105">
+                            {% else %}
+                                <div class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white/20 border-4 border-white/30 shadow-lg flex items-center justify-center group-hover:border-white/50 transition-all duration-300 group-hover:scale-105">
+                                    <img src="{% static 'images/avatars/default-avatar.svg' %}" 
+                                         alt="默认头像"
+                                         class="w-16 h-16 md:w-20 md:h-20 rounded-full">
+                                </div>
+                            {% endif %}
+                            <!-- Edit indicator -->
+                            <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md group-hover:bg-blue-50 transition-colors">
+                                <svg class="w-3 h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- Welcome Message -->
+                <div class="flex-1 text-center md:text-left">
+                    <h1 class="text-2xl md:text-3xl font-bold mb-2">
+                        {% if user.first_name or user.last_name %}
+                            欢迎回来，{{ user.first_name }}{{ user.last_name }}！
+                        {% else %}
+                            欢迎回来，{{ user.username }}！
+                        {% endif %}
+                    </h1>
+                    <p class="text-blue-100 text-base md:text-lg mb-3">
+                        {% now "Y年m月d日" %} - 今天是寻找理想工作的好日子
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start space-y-2 sm:space-y-0 sm:space-x-4 text-blue-100">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                            <span>求职者</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                            <span class="truncate max-w-xs">{{ user.email }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="flex-shrink-0">
+                    <a href="{% url 'accounts:user_profile' %}" 
+                       class="inline-flex items-center px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors duration-300">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                        查看资料
+                    </a>
+                </div>
+            </div>
+        </div>
+        
         <!-- Stats Overview -->
         <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
             <div class="bg-white rounded-lg shadow p-6">
@@ -74,18 +144,24 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">职位</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">公司</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">申请日期</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                职位</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                公司</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                申请日期</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                状态</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                操作</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         {% for application in applications %}
                         <tr>
                             <td class="px-6 py-4">
-                                <a href="{% url 'jobs:job_detail' application.job.id %}" class="text-sm font-medium text-blue-600 hover:text-blue-900">
+                                <a href="{% url 'jobs:job_detail' application.job.id %}"
+                                    class="text-sm font-medium text-blue-600 hover:text-blue-900">
                                     {{ application.job.title }}
                                 </a>
                             </td>
@@ -108,33 +184,34 @@
                             <td class="px-6 py-4">
                                 <div class="flex space-x-3">
                                     {% if application.status == 'pending' or application.status == 'reviewing' %}
-                                        <!-- Edit Button -->
-                                        <button onclick="openEditModal('{{ application.id }}', '{{ application.cover_letter|escapejs }}')" 
-                                                class="text-blue-600 hover:text-blue-900 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                            </svg>
-                                            编辑
-                                        </button>
+                                    <!-- Edit Button -->
+                                    <button
+                                        onclick="openEditModal('{{ application.id }}', '{{ application.cover_letter|escapejs }}')"
+                                        class="text-blue-600 hover:text-blue-900 flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        编辑
+                                    </button>
 
-                                        <!-- Withdraw Button -->
-                                        <button onclick="confirmWithdraw('{{ application.id }}')" 
-                                                class="text-red-600 hover:text-red-900 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                            </svg>
-                                            撤回
-                                        </button>
+                                    <!-- Withdraw Button -->
+                                    <button onclick="confirmWithdraw('{{ application.id }}')"
+                                        class="text-red-600 hover:text-red-900 flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                        撤回
+                                    </button>
 
-                                        <form id="withdraw-form-{{ application.id }}" 
-                                              action="{% url 'dashboard:withdraw_application' application.id %}" 
-                                              method="POST" class="hidden">
-                                            {% csrf_token %}
-                                        </form>
+                                    <form id="withdraw-form-{{ application.id }}"
+                                        action="{% url 'dashboard:withdraw_application' application.id %}" method="POST"
+                                        class="hidden">
+                                        {% csrf_token %}
+                                    </form>
                                     {% else %}
-                                        <span class="text-gray-400 text-sm">无可用操作</span>
+                                    <span class="text-gray-400 text-sm">无可用操作</span>
                                     {% endif %}
                                 </div>
                             </td>
@@ -158,46 +235,45 @@
             </div>
             <div class="p-6">
                 {% if bookmarks %}
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {% for bookmark in bookmarks %}
-                        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                            <div class="flex justify-between items-start mb-3">
-                                <h3 class="text-lg font-semibold text-gray-900">
-                                    <a href="{% url 'jobs:job_detail' bookmark.job.id %}" class="hover:text-custom">
-                                        {{ bookmark.job.title }}
-                                    </a>
-                                </h3>
-                                <button class="text-yellow-500 hover:text-yellow-600 bookmark-remove-btn" 
-                                        data-job-id="{{ bookmark.job.id }}"
-                                        title="取消收藏">
-                                    <i class="fas fa-bookmark"></i>
-                                </button>
-                            </div>
-                            <div class="text-sm text-gray-600 mb-2">
-                                <i class="fas fa-building mr-1"></i>
-                                {{ bookmark.job.employer.company_name }}
-                            </div>
-                            <div class="text-sm text-gray-600 mb-2">
-                                <i class="fas fa-location-dot mr-1"></i>
-                                {{ bookmark.job.location }}
-                            </div>
-                            <div class="text-sm text-gray-600 mb-3">
-                                <i class="fas fa-money-bill-wave mr-1"></i>
-                                {{ bookmark.job.salary }}
-                            </div>
-                            <div class="flex justify-between items-center text-xs text-gray-500">
-                                <span>收藏于 {{ bookmark.created_date|date:"M d, Y" }}</span>
-                                <span class="px-2 py-1 bg-gray-100 rounded">{{ bookmark.job.job_type }}</span>
-                            </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for bookmark in bookmarks %}
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                <a href="{% url 'jobs:job_detail' bookmark.job.id %}" class="hover:text-custom">
+                                    {{ bookmark.job.title }}
+                                </a>
+                            </h3>
+                            <button class="text-yellow-500 hover:text-yellow-600 bookmark-remove-btn"
+                                data-job-id="{{ bookmark.job.id }}" title="取消收藏">
+                                <i class="fas fa-bookmark"></i>
+                            </button>
                         </div>
-                        {% endfor %}
+                        <div class="text-sm text-gray-600 mb-2">
+                            <i class="fas fa-building mr-1"></i>
+                            {{ bookmark.job.employer.company_name }}
+                        </div>
+                        <div class="text-sm text-gray-600 mb-2">
+                            <i class="fas fa-location-dot mr-1"></i>
+                            {{ bookmark.job.location }}
+                        </div>
+                        <div class="text-sm text-gray-600 mb-3">
+                            <i class="fas fa-money-bill-wave mr-1"></i>
+                            {{ bookmark.job.salary }}
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-gray-500">
+                            <span>收藏于 {{ bookmark.created_date|date:"M d, Y" }}</span>
+                            <span class="px-2 py-1 bg-gray-100 rounded">{{ bookmark.job.job_type }}</span>
+                        </div>
                     </div>
+                    {% endfor %}
+                </div>
                 {% else %}
-                    <div class="text-center py-8">
-                        <i class="fas fa-bookmark text-4xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-500">暂无收藏的职位</p>
-                        <p class="text-sm text-gray-400 mt-2">浏览职位时点击收藏按钮来保存感兴趣的职位</p>
-                    </div>
+                <div class="text-center py-8">
+                    <i class="fas fa-bookmark text-4xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500">暂无收藏的职位</p>
+                    <p class="text-sm text-gray-400 mt-2">浏览职位时点击收藏按钮来保存感兴趣的职位</p>
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -209,9 +285,8 @@
                 {% if browse_history %}
                 <form method="POST" action="{% url 'dashboard:clear_browse_history' %}" class="inline">
                     {% csrf_token %}
-                    <button type="button" 
-                            onclick="confirmClearHistory()"
-                            class="text-sm text-red-600 hover:text-red-800 flex items-center">
+                    <button type="button" onclick="confirmClearHistory()"
+                        class="text-sm text-red-600 hover:text-red-800 flex items-center">
                         <i class="fas fa-trash mr-1"></i>
                         清除历史
                     </button>
@@ -220,57 +295,59 @@
             </div>
             <div class="p-6">
                 {% if browse_history %}
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {% for history in browse_history %}
-                        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                            <div class="flex justify-between items-start mb-3">
-                                <h3 class="text-lg font-semibold text-gray-900">
-                                    <a href="{% url 'jobs:job_detail' history.job.id %}" class="hover:text-custom">
-                                        {{ history.job.title }}
-                                    </a>
-                                </h3>
-                                <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">
-                                    {{ history.browsed_date|timesince }}前
-                                </span>
-                            </div>
-                            <div class="text-sm text-gray-600 mb-2">
-                                <i class="fas fa-building mr-1"></i>
-                                {{ history.job.employer.company_name }}
-                            </div>
-                            <div class="text-sm text-gray-600 mb-2">
-                                <i class="fas fa-location-dot mr-1"></i>
-                                {{ history.job.location }}
-                            </div>
-                            <div class="text-sm text-gray-600 mb-3">
-                                <i class="fas fa-money-bill-wave mr-1"></i>
-                                {{ history.job.salary }}
-                            </div>
-                            <div class="flex justify-between items-center text-xs text-gray-500">
-                                <span>浏览于 {{ history.browsed_date|date:"M d, Y H:i" }}</span>
-                                <span class="px-2 py-1 bg-gray-100 rounded">{{ history.job.job_type }}</span>
-                            </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for history in browse_history %}
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                <a href="{% url 'jobs:job_detail' history.job.id %}" class="hover:text-custom">
+                                    {{ history.job.title }}
+                                </a>
+                            </h3>
+                            <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">
+                                {{ history.browsed_date|timesince }}前
+                            </span>
                         </div>
-                        {% endfor %}
+                        <div class="text-sm text-gray-600 mb-2">
+                            <i class="fas fa-building mr-1"></i>
+                            {{ history.job.employer.company_name }}
+                        </div>
+                        <div class="text-sm text-gray-600 mb-2">
+                            <i class="fas fa-location-dot mr-1"></i>
+                            {{ history.job.location }}
+                        </div>
+                        <div class="text-sm text-gray-600 mb-3">
+                            <i class="fas fa-money-bill-wave mr-1"></i>
+                            {{ history.job.salary }}
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-gray-500">
+                            <span>浏览于 {{ history.browsed_date|date:"M d, Y H:i" }}</span>
+                            <span class="px-2 py-1 bg-gray-100 rounded">{{ history.job.job_type }}</span>
+                        </div>
                     </div>
+                    {% endfor %}
+                </div>
                 {% else %}
-                    <div class="text-center py-8">
-                        <i class="fas fa-history text-4xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-500">暂无浏览记录</p>
-                        <p class="text-sm text-gray-400 mt-2">浏览职位详情时会自动记录您的足迹</p>
-                    </div>
+                <div class="text-center py-8">
+                    <i class="fas fa-history text-4xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500">暂无浏览记录</p>
+                    <p class="text-sm text-gray-400 mt-2">浏览职位详情时会自动记录您的足迹</p>
+                </div>
                 {% endif %}
             </div>
         </div>
 
         <!-- Edit Application Modal -->
         <div id="editModal" class="fixed inset-0 bg-black bg-opacity-30 hidden items-center justify-center z-50">
-            <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full mx-4 transform transition-all duration-300 ease-out scale-95 opacity-0" id="editModalContent">
+            <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full mx-4 transform transition-all duration-300 ease-out scale-95 opacity-0"
+                id="editModalContent">
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-xl font-semibold text-gray-900">编辑申请</h3>
                         <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
                     </div>
@@ -278,16 +355,16 @@
                         {% csrf_token %}
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-3">求职信</label>
-                            <textarea name="cover_letter" id="editCoverLetter" rows="6" 
-                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"></textarea>
+                            <textarea name="cover_letter" id="editCoverLetter" rows="6"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"></textarea>
                         </div>
                         <div class="flex justify-end space-x-3">
-                            <button type="button" onclick="closeEditModal()" 
-                                    class="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                            <button type="button" onclick="closeEditModal()"
+                                class="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
                                 取消
                             </button>
-                            <button type="submit" 
-                                    class="px-6 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                            <button type="submit"
+                                class="px-6 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
                                 保存更改
                             </button>
                         </div>
@@ -298,12 +375,15 @@
 
         <!-- Custom Confirmation Dialog -->
         <div id="confirmDialog" class="fixed inset-0 bg-black bg-opacity-30 hidden items-center justify-center z-50">
-            <div class="bg-white rounded-xl shadow-2xl max-w-sm w-full mx-4 transform transition-all duration-300 ease-out scale-95 opacity-0" id="confirmDialogContent">
+            <div class="bg-white rounded-xl shadow-2xl max-w-sm w-full mx-4 transform transition-all duration-300 ease-out scale-95 opacity-0"
+                id="confirmDialogContent">
                 <div class="p-6">
                     <div class="flex items-center mb-4">
-                        <div class="flex-shrink-0 w-10 h-10 mx-auto bg-red-100 rounded-full flex items-center justify-center">
+                        <div
+                            class="flex-shrink-0 w-10 h-10 mx-auto bg-red-100 rounded-full flex items-center justify-center">
                             <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 18.5c-.77.833.192 2.5 1.732 2.5z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 18.5c-.77.833.192 2.5 1.732 2.5z" />
                             </svg>
                         </div>
                     </div>
@@ -311,12 +391,12 @@
                         <h3 class="text-lg font-medium text-gray-900 mb-2" id="confirmDialogTitle">确认操作</h3>
                         <p class="text-sm text-gray-500 mb-6" id="confirmDialogMessage">此操作无法撤销，确定要继续吗？</p>
                         <div class="flex space-x-3">
-                            <button type="button" id="confirmDialogCancel" 
-                                    class="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                            <button type="button" id="confirmDialogCancel"
+                                class="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
                                 取消
                             </button>
-                            <button type="button" id="confirmDialogConfirm" 
-                                    class="flex-1 px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                            <button type="button" id="confirmDialogConfirm"
+                                class="flex-1 px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
                                 确认
                             </button>
                         </div>
@@ -326,227 +406,227 @@
         </div>
 
         <script>
-        // Custom Confirmation Dialog
-        function showConfirmDialog(title, message, onConfirm, onCancel = null) {
-            const dialog = document.getElementById('confirmDialog');
-            const content = document.getElementById('confirmDialogContent');
-            const titleEl = document.getElementById('confirmDialogTitle');
-            const messageEl = document.getElementById('confirmDialogMessage');
-            const confirmBtn = document.getElementById('confirmDialogConfirm');
-            const cancelBtn = document.getElementById('confirmDialogCancel');
-            
-            // Set content
-            titleEl.textContent = title;
-            messageEl.textContent = message;
-            
-            // Remove existing event listeners
-            const newConfirmBtn = confirmBtn.cloneNode(true);
-            const newCancelBtn = cancelBtn.cloneNode(true);
-            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
-            cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
-            
-            // Add new event listeners
-            newConfirmBtn.addEventListener('click', () => {
-                hideConfirmDialog();
-                if (onConfirm) onConfirm();
-            });
-            
-            newCancelBtn.addEventListener('click', () => {
-                hideConfirmDialog();
-                if (onCancel) onCancel();
-            });
-            
-            // Show dialog with animation
-            dialog.classList.remove('hidden');
-            dialog.classList.add('flex');
-            
-            // Trigger animation
-            setTimeout(() => {
-                content.classList.remove('scale-95', 'opacity-0');
-                content.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
-        
-        function hideConfirmDialog() {
-            const dialog = document.getElementById('confirmDialog');
-            const content = document.getElementById('confirmDialogContent');
-            
-            // Hide with animation
-            content.classList.remove('scale-100', 'opacity-100');
-            content.classList.add('scale-95', 'opacity-0');
-            
-            setTimeout(() => {
-                dialog.classList.remove('flex');
-                dialog.classList.add('hidden');
-            }, 300);
-        }
-        
-        // Close dialog when clicking outside
-        document.getElementById('confirmDialog').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) {
-                hideConfirmDialog();
-            }
-        });
-        
-        // Close edit modal when clicking outside
-        document.getElementById('editModal').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) {
-                closeEditModal();
-            }
-        });
-        
-        function openEditModal(applicationId, coverLetter) {
-            const modal = document.getElementById('editModal');
-            const content = document.getElementById('editModalContent');
-            const form = document.getElementById('editForm');
-            const textarea = document.getElementById('editCoverLetter');
-            
-            form.action = `/dashboard/application/${applicationId}/edit/`;
-            textarea.value = coverLetter;
-            
-            // Show modal with animation
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            
-            // Trigger animation
-            setTimeout(() => {
-                content.classList.remove('scale-95', 'opacity-0');
-                content.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
+            // Custom Confirmation Dialog
+            function showConfirmDialog(title, message, onConfirm, onCancel = null) {
+                const dialog = document.getElementById('confirmDialog');
+                const content = document.getElementById('confirmDialogContent');
+                const titleEl = document.getElementById('confirmDialogTitle');
+                const messageEl = document.getElementById('confirmDialogMessage');
+                const confirmBtn = document.getElementById('confirmDialogConfirm');
+                const cancelBtn = document.getElementById('confirmDialogCancel');
 
-        function closeEditModal() {
-            const modal = document.getElementById('editModal');
-            const content = document.getElementById('editModalContent');
-            
-            // Hide with animation
-            content.classList.remove('scale-100', 'opacity-100');
-            content.classList.add('scale-95', 'opacity-0');
-            
-            setTimeout(() => {
-                modal.classList.remove('flex');
-                modal.classList.add('hidden');
-            }, 300);
-        }
+                // Set content
+                titleEl.textContent = title;
+                messageEl.textContent = message;
 
-        function confirmWithdraw(applicationId) {
-            showConfirmDialog(
-                '撤回申请',
-                '确定要撤回此申请吗？此操作无法撤销。',
-                () => {
-                    document.getElementById(`withdraw-form-${applicationId}`).submit();
+                // Remove existing event listeners
+                const newConfirmBtn = confirmBtn.cloneNode(true);
+                const newCancelBtn = cancelBtn.cloneNode(true);
+                confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+                cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+
+                // Add new event listeners
+                newConfirmBtn.addEventListener('click', () => {
+                    hideConfirmDialog();
+                    if (onConfirm) onConfirm();
+                });
+
+                newCancelBtn.addEventListener('click', () => {
+                    hideConfirmDialog();
+                    if (onCancel) onCancel();
+                });
+
+                // Show dialog with animation
+                dialog.classList.remove('hidden');
+                dialog.classList.add('flex');
+
+                // Trigger animation
+                setTimeout(() => {
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            }
+
+            function hideConfirmDialog() {
+                const dialog = document.getElementById('confirmDialog');
+                const content = document.getElementById('confirmDialogContent');
+
+                // Hide with animation
+                content.classList.remove('scale-100', 'opacity-100');
+                content.classList.add('scale-95', 'opacity-0');
+
+                setTimeout(() => {
+                    dialog.classList.remove('flex');
+                    dialog.classList.add('hidden');
+                }, 300);
+            }
+
+            // Close dialog when clicking outside
+            document.getElementById('confirmDialog').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) {
+                    hideConfirmDialog();
                 }
-            );
-        }
-        
-        function confirmClearHistory() {
-            showConfirmDialog(
-                '清除浏览历史',
-                '确定要清除所有浏览历史吗？此操作无法撤销。',
-                () => {
-                    // Find the form and submit it
-                    const form = document.querySelector('form[action*="clear-browse-history"]');
-                    if (form) {
-                        form.submit();
+            });
+
+            // Close edit modal when clicking outside
+            document.getElementById('editModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) {
+                    closeEditModal();
+                }
+            });
+
+            function openEditModal(applicationId, coverLetter) {
+                const modal = document.getElementById('editModal');
+                const content = document.getElementById('editModalContent');
+                const form = document.getElementById('editForm');
+                const textarea = document.getElementById('editCoverLetter');
+
+                form.action = `/dashboard/application/${applicationId}/edit/`;
+                textarea.value = coverLetter;
+
+                // Show modal with animation
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+
+                // Trigger animation
+                setTimeout(() => {
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            }
+
+            function closeEditModal() {
+                const modal = document.getElementById('editModal');
+                const content = document.getElementById('editModalContent');
+
+                // Hide with animation
+                content.classList.remove('scale-100', 'opacity-100');
+                content.classList.add('scale-95', 'opacity-0');
+
+                setTimeout(() => {
+                    modal.classList.remove('flex');
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+
+            function confirmWithdraw(applicationId) {
+                showConfirmDialog(
+                    '撤回申请',
+                    '确定要撤回此申请吗？此操作无法撤销。',
+                    () => {
+                        document.getElementById(`withdraw-form-${applicationId}`).submit();
                     }
-                }
-            );
-        }
+                );
+            }
 
-        // Bookmark functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Use event delegation to handle dynamically added buttons
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.bookmark-remove-btn')) {
-                    const btn = e.target.closest('.bookmark-remove-btn');
-                    const jobId = btn.dataset.jobId;
-                    
-                    showConfirmDialog(
-                        '取消收藏',
-                        '确定要取消收藏这个职位吗？',
-                        () => {
-                            // Disable button during request
-                            btn.disabled = true;
-                            
-                            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
-                            
-                            fetch(`/jobs/${jobId}/bookmark/`, {
-                                method: 'POST',
-                                headers: {
-                                    'X-CSRFToken': csrfToken ? csrfToken.value : '',
-                                    'Content-Type': 'application/json',
-                                },
-                            })
-                            .then(response => {
-                                console.log('Response status:', response.status);
-                                if (!response.ok) {
-                                    throw new Error(`HTTP error! status: ${response.status}`);
-                                }
-                                return response.json();
-                            })
-                            .then(data => {
-                                console.log('Bookmark toggle response:', data);
-                                if (data.success && !data.is_bookmarked) {
-                                    // Remove the bookmark card from the page
-                                    btn.closest('.border').remove();
-                                    
-                                    // Update the bookmark count in the stats card
-                                    const bookmarkCountElement = document.querySelector('.bg-orange-100').parentElement.querySelector('p:last-child');
-                                    if (bookmarkCountElement) {
-                                        const currentCount = parseInt(bookmarkCountElement.textContent);
-                                        bookmarkCountElement.textContent = Math.max(0, currentCount - 1);
-                                    }
-                                    
-                                    // Check if no bookmarks left
-                                    const bookmarkGrid = document.querySelector('.grid');
-                                    if (bookmarkGrid && bookmarkGrid.children.length === 0) {
-                                        bookmarkGrid.parentElement.innerHTML = `
+            function confirmClearHistory() {
+                showConfirmDialog(
+                    '清除浏览历史',
+                    '确定要清除所有浏览历史吗？此操作无法撤销。',
+                    () => {
+                        // Find the form and submit it
+                        const form = document.querySelector('form[action*="clear-browse-history"]');
+                        if (form) {
+                            form.submit();
+                        }
+                    }
+                );
+            }
+
+            // Bookmark functionality
+            document.addEventListener('DOMContentLoaded', function () {
+                // Use event delegation to handle dynamically added buttons
+                document.addEventListener('click', function (e) {
+                    if (e.target.closest('.bookmark-remove-btn')) {
+                        const btn = e.target.closest('.bookmark-remove-btn');
+                        const jobId = btn.dataset.jobId;
+
+                        showConfirmDialog(
+                            '取消收藏',
+                            '确定要取消收藏这个职位吗？',
+                            () => {
+                                // Disable button during request
+                                btn.disabled = true;
+
+                                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+
+                                fetch(`/jobs/${jobId}/bookmark/`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRFToken': csrfToken ? csrfToken.value : '',
+                                        'Content-Type': 'application/json',
+                                    },
+                                })
+                                    .then(response => {
+                                        console.log('Response status:', response.status);
+                                        if (!response.ok) {
+                                            throw new Error(`HTTP error! status: ${response.status}`);
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        console.log('Bookmark toggle response:', data);
+                                        if (data.success && !data.is_bookmarked) {
+                                            // Remove the bookmark card from the page
+                                            btn.closest('.border').remove();
+
+                                            // Update the bookmark count in the stats card
+                                            const bookmarkCountElement = document.querySelector('.bg-orange-100').parentElement.querySelector('p:last-child');
+                                            if (bookmarkCountElement) {
+                                                const currentCount = parseInt(bookmarkCountElement.textContent);
+                                                bookmarkCountElement.textContent = Math.max(0, currentCount - 1);
+                                            }
+
+                                            // Check if no bookmarks left
+                                            const bookmarkGrid = document.querySelector('.grid');
+                                            if (bookmarkGrid && bookmarkGrid.children.length === 0) {
+                                                bookmarkGrid.parentElement.innerHTML = `
                                             <div class="text-center py-8">
                                                 <i class="fas fa-bookmark text-4xl text-gray-300 mb-4"></i>
                                                 <p class="text-gray-500">暂无收藏的职位</p>
                                                 <p class="text-sm text-gray-400 mt-2">浏览职位时点击收藏按钮来保存感兴趣的职位</p>
                                             </div>
                                         `;
-                                    }
-                                    
-                                    showMessage(data.message, 'success');
-                                } else {
-                                    showMessage(data.message || '操作失败，请重试', 'error');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Bookmark toggle error:', error);
-                                console.error('Error details:', {
-                                    message: error.message,
-                                    stack: error.stack,
-                                    jobId: jobId,
-                                    url: `/jobs/${jobId}/bookmark/`
-                                });
-                                showMessage('网络错误，请重试', 'error');
-                            })
-                            .finally(() => {
-                                // Re-enable button
-                                btn.disabled = false;
-                            });
-                        }
-                    );
-                }
-            });
-        });
+                                            }
 
-        function showMessage(message, type) {
-            // Create a simple toast notification
-            const toast = document.createElement('div');
-            toast.className = `fixed top-20 right-4 px-4 py-2 rounded-md text-white z-50 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
-            toast.textContent = message;
-            
-            document.body.appendChild(toast);
-            
-            // Remove after 3 seconds
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
+                                            showMessage(data.message, 'success');
+                                        } else {
+                                            showMessage(data.message || '操作失败，请重试', 'error');
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Bookmark toggle error:', error);
+                                        console.error('Error details:', {
+                                            message: error.message,
+                                            stack: error.stack,
+                                            jobId: jobId,
+                                            url: `/jobs/${jobId}/bookmark/`
+                                        });
+                                        showMessage('网络错误，请重试', 'error');
+                                    })
+                                    .finally(() => {
+                                        // Re-enable button
+                                        btn.disabled = false;
+                                    });
+                            }
+                        );
+                    }
+                });
+            });
+
+            function showMessage(message, type) {
+                // Create a simple toast notification
+                const toast = document.createElement('div');
+                toast.className = `fixed top-20 right-4 px-4 py-2 rounded-md text-white z-50 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+                toast.textContent = message;
+
+                document.body.appendChild(toast);
+
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+            }
         </script>
     </div>
 </main>

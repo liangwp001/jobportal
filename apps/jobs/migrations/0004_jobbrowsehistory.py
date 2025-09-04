@@ -31,3 +31,4 @@ class Migration(migrations.Migration):
             index=models.Index(fields=['job_seeker', '-browsed_date'], name='jobs_jobbrow_job_see_8b8b0a_idx'),
         ),
     ]
+
