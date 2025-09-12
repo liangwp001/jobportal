@@ -3,450 +3,463 @@
 {% block title %}{{ job.job_title|default:"岗位详情" }} - 招聘平台{% endblock %}
 
 {% block content %}
-<main class="pt-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="bg-white shadow rounded-lg">
-            <!-- Job Header -->
-            <div class="p-6 border-b border-gray-200">
-                <!-- Job Post Category and Title -->
-                <div class="mb-4">
-                    <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 mb-2">
-                        {{ job.job_post.category }}
-                    </div>
+    <main class="pt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="bg-white shadow rounded-lg">
+                <!-- Job Header -->
+                <div class="p-6 border-b border-gray-200">
+                    <!-- Job Post Category and Title -->
+                    <!-- <div class="mb-4">
+                    
                     <h1 class="text-2xl font-bold text-gray-900 mb-2">
                         <a href="{% url 'jobs:job_post_detail' job.job_post.id %}" class="hover:text-blue-600 transition-colors">
                             {{ job.job_post.title }}
                         </a>
                     </h1>
-                </div>
+                </div> -->
 
-                <!-- Job Title and Organization -->
-                <div class="mb-4">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2">{{ job.job_title|default:"岗位名称待定" }}</h2>
-                    <div class="flex items-center text-gray-600 mb-2">
-                        <i class="fas fa-building mr-2"></i>
-                        <span>{{ job.organization|default:"招聘单位待定" }}</span>
-                    </div>
-                </div>
+                    <!-- Job Title and Organization -->
+                    <div class="mb-4">
+                        <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ job.job_title|default:"岗位名称待定" }}</h1>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div class="flex items-center text-gray-600 mb-2">
+                                    <i class="fas fa-link mr-2"></i>
+                                    <a href="{% url 'jobs:job_post_detail' job.job_post.id %}"
+                                       class="hover:text-blue-600 transition-colors"><span>{{ job.job_post.title|default:"" }}</span></a>
+                                </div>
+                                <div class="flex items-center text-gray-600 mb-2">
+                                    <i class="fas fa-building mr-2"></i>
+                                    <span>{{ job.organization|default:"招聘单位待定" }}</span>
+                                </div>
+                                <div class="flex items-center text-gray-600 mb-2">
+                                    <i class="fas fa-tags mr-2"></i>
+                                    <span>{{ job.job_post.category|default:"" }}</span>
+                                </div>
 
-                <!-- Key Information -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {% if job.job_location %}
-                    <div class="flex items-center text-gray-600">
-                        <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>
-                        <span>{{ job.job_location }}</span>
-                    </div>
-                    {% endif %}
-
-                    {% if job.num_positions %}
-                    <div class="flex items-center text-gray-600">
-                        <i class="fas fa-users mr-2 text-green-500"></i>
-                        <span>招聘 {{ job.num_positions }} 人</span>
-                    </div>
-                    {% endif %}
-
-                    {% if job.employment_type %}
-                    <div class="flex items-center text-gray-600">
-                        <i class="fas fa-briefcase mr-2 text-purple-500"></i>
-                        <span>{{ job.employment_type }}</span>
-                    </div>
-                    {% endif %}
-
-                    {% if job.category %}
-                    <div class="flex items-center text-gray-600">
-                        <i class="fas fa-tag mr-2 text-orange-500"></i>
-                        <span>{{ job.category }}</span>
-                    </div>
-                    {% endif %}
-                </div>
-
-                <!-- Application Time Status -->
-                {% if job.job_post.application_start_date and job.job_post.application_end_date %}
-                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <div class="text-sm text-gray-600 mb-1">报名时间</div>
-                            <div class="text-lg font-semibold text-gray-900">
-                                {{ job.job_post.application_start_date|date:"Y年m月d日" }} 至 {{ job.job_post.application_end_date|date:"Y年m月d日" }}
                             </div>
-                        </div>
-                        <div class="text-right">
-                            {% if job.job_post.application_end_date < today %}
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                    </div>
+
+                    <!-- Key Information -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {% if job.job_location %}
+                            <div class="flex items-center text-gray-600">
+                                <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>
+                                <span>{{ job.job_location }}</span>
+                            </div>
+                        {% endif %}
+
+                        {% if job.num_positions %}
+                            <div class="flex items-center text-gray-600">
+                                <i class="fas fa-users mr-2 text-green-500"></i>
+                                <span>招聘 {{ job.num_positions }} 人</span>
+                            </div>
+                        {% endif %}
+
+                        {% if job.employment_type %}
+                            <div class="flex items-center text-gray-600">
+                                <i class="fas fa-briefcase mr-2 text-purple-500"></i>
+                                <span>{{ job.employment_type }}</span>
+                            </div>
+                        {% endif %}
+                        {% if job.category %}
+                            <div class="flex items-center text-gray-600">
+                                <i class="fas fa-tag mr-2 text-orange-500"></i>
+                                <span>{{ job.category }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Application Time Status -->
+                    {% if job.job_post.application_start_date and job.job_post.application_end_date %}
+                        <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-sm text-gray-600 mb-1">报名时间</div>
+                                    <div class="text-lg font-semibold text-gray-900">
+                                        {{ job.job_post.application_start_date|date:"Y年m月d日" }}
+                                        至 {{ job.job_post.application_end_date|date:"Y年m月d日" }}
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    {% if job.job_post.application_end_date < today %}
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
                                     <i class="fas fa-times-circle mr-1"></i>
                                     已截止
                                 </span>
-                            {% elif job.job_post.application_start_date > today %}
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                                    {% elif job.job_post.application_start_date > today %}
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                                     <i class="fas fa-clock mr-1"></i>
                                     未开始
                                 </span>
-                            {% else %}
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                    {% else %}
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                                     <i class="fas fa-check-circle mr-1"></i>
                                     报名中
                                 </span>
-                            {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-
-            <!-- Job Content -->
-            <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="lg:col-span-2 space-y-8">
-                    <!-- 岗位职责 -->
-                    {% if job.job_responsibilities %}
-                    <div>
-                        <h2 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                            <i class="fas fa-tasks mr-2 text-blue-500"></i>
-                            岗位职责
-                        </h2>
-                        <div class="prose max-w-none text-gray-700">
-                            {{ job.job_responsibilities|linebreaks }}
-                        </div>
-                    </div>
                     {% endif %}
-
-                    <!-- 任职要求 -->
-                    <div>
-                        <h2 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                            <i class="fas fa-user-check mr-2 text-green-500"></i>
-                            任职要求
-                        </h2>
-                        <div class="space-y-4">
-                            <!-- 学历要求 -->
-                            {% if job.degree_requirement %}
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <h3 class="font-medium text-gray-900 mb-2 flex items-center">
-                                    <i class="fas fa-graduation-cap mr-2 text-blue-500"></i>
-                                    学历要求
-                                </h3>
-                                <p class="text-gray-700">{{ job.degree_requirement|linebreaks }}</p>
-                            </div>
-                            {% endif %}
-
-                            <!-- 专业要求 -->
-                            {% if job.major_requirement %}
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <h3 class="font-medium text-gray-900 mb-2 flex items-center">
-                                    <i class="fas fa-book mr-2 text-green-500"></i>
-                                    专业要求
-                                </h3>
-                                <p class="text-gray-700">{{ job.major_requirement|linebreaks }}</p>
-                            </div>
-                            {% endif %}
-
-                            <!-- 工作经验要求 -->
-                            {% if job.job_experience_requirement %}
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <h3 class="font-medium text-gray-900 mb-2 flex items-center">
-                                    <i class="fas fa-briefcase mr-2 text-purple-500"></i>
-                                    工作经验要求
-                                </h3>
-                                <p class="text-gray-700">{{ job.job_experience_requirement|linebreaks }}</p>
-                            </div>
-                            {% endif %}
-
-                            <!-- 年龄要求 -->
-                            {% if job.age_requirement %}
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <h3 class="font-medium text-gray-900 mb-2 flex items-center">
-                                    <i class="fas fa-calendar mr-2 text-orange-500"></i>
-                                    年龄要求
-                                </h3>
-                                <p class="text-gray-700">{{ job.age_requirement|linebreaks }}</p>
-                            </div>
-                            {% endif %}
-
-                            <!-- 政治面貌要求 -->
-                            {% if job.political_status_requirement %}
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <h3 class="font-medium text-gray-900 mb-2 flex items-center">
-                                    <i class="fas fa-flag mr-2 text-red-500"></i>
-                                    政治面貌要求
-                                </h3>
-                                <p class="text-gray-700">{{ job.political_status_requirement|linebreaks }}</p>
-                            </div>
-                            {% endif %}
-
-                            <!-- 证书要求 -->
-                            {% if job.certificate_requirement %}
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <h3 class="font-medium text-gray-900 mb-2 flex items-center">
-                                    <i class="fas fa-certificate mr-2 text-yellow-500"></i>
-                                    证书要求
-                                </h3>
-                                <p class="text-gray-700">{{ job.certificate_requirement|linebreaks }}</p>
-                            </div>
-                            {% endif %}
-
-                            <!-- 其他要求 -->
-                            {% if job.other_requirement %}
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <h3 class="font-medium text-gray-900 mb-2 flex items-center">
-                                    <i class="fas fa-list mr-2 text-gray-500"></i>
-                                    其他要求
-                                </h3>
-                                <p class="text-gray-700">{{ job.other_requirement|linebreaks }}</p>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <!-- 薪资待遇 -->
-                    {% if job.salary_and_benefits %}
-                    <div>
-                        <h2 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                            <i class="fas fa-money-bill-wave mr-2 text-green-500"></i>
-                            薪资待遇
-                        </h2>
-                        <div class="prose max-w-none text-gray-700">
-                            {{ job.salary_and_benefits|linebreaks }}
-                        </div>
-                    </div>
-                    {% endif %}
-
                 </div>
 
-                <!-- Application Sidebar -->
-                <div class="lg:col-span-1 space-y-6">
-                    <!-- Bookmark Button -->
-                    {% if user.is_authenticated and user.is_job_seeker %}
-                    <div>
-                        <button id="bookmark-btn" 
-                                data-job-id="{{ job.id }}" 
-                                data-is-bookmarked="{{ is_bookmarked|yesno:'true,false' }}"
-                                class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium transition-colors
+                <!-- Job Content -->
+                <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 space-y-8">
+                        <!-- 岗位职责 -->
+                        {% if job.job_responsibilities %}
+                            <div>
+                                <h2 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                                    <i class="fas fa-tasks mr-2 text-blue-500"></i>
+                                    岗位职责
+                                </h2>
+                                <div class="prose max-w-none text-gray-700">
+                                    {{ job.job_responsibilities|linebreaks }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- 任职要求 -->
+                        <div>
+                            <h2 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                                <i class="fas fa-user-check mr-2 text-green-500"></i>
+                                任职要求
+                            </h2>
+                            <div class="space-y-4">
+                                <!-- 学历要求 -->
+                                {% if job.degree_requirement %}
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h3 class="font-medium text-gray-900 mb-2 flex items-center">
+                                            <i class="fas fa-graduation-cap mr-2 text-blue-500"></i>
+                                            学历要求
+                                        </h3>
+                                        <p class="text-gray-700">{{ job.degree_requirement|linebreaks }}</p>
+                                    </div>
+                                {% endif %}
+
+                                <!-- 专业要求 -->
+                                {% if job.major_requirement %}
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h3 class="font-medium text-gray-900 mb-2 flex items-center">
+                                            <i class="fas fa-book mr-2 text-green-500"></i>
+                                            专业要求
+                                        </h3>
+                                        <p class="text-gray-700">{{ job.major_requirement|linebreaks }}</p>
+                                    </div>
+                                {% endif %}
+
+                                <!-- 工作经验要求 -->
+                                {% if job.job_experience_requirement %}
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h3 class="font-medium text-gray-900 mb-2 flex items-center">
+                                            <i class="fas fa-briefcase mr-2 text-purple-500"></i>
+                                            工作经验要求
+                                        </h3>
+                                        <p class="text-gray-700">{{ job.job_experience_requirement|linebreaks }}</p>
+                                    </div>
+                                {% endif %}
+
+                                <!-- 年龄要求 -->
+                                {% if job.age_requirement %}
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h3 class="font-medium text-gray-900 mb-2 flex items-center">
+                                            <i class="fas fa-calendar mr-2 text-orange-500"></i>
+                                            年龄要求
+                                        </h3>
+                                        <p class="text-gray-700">{{ job.age_requirement|linebreaks }}</p>
+                                    </div>
+                                {% endif %}
+
+                                <!-- 政治面貌要求 -->
+                                {% if job.political_status_requirement %}
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h3 class="font-medium text-gray-900 mb-2 flex items-center">
+                                            <i class="fas fa-flag mr-2 text-red-500"></i>
+                                            政治面貌要求
+                                        </h3>
+                                        <p class="text-gray-700">{{ job.political_status_requirement|linebreaks }}</p>
+                                    </div>
+                                {% endif %}
+
+                                <!-- 证书要求 -->
+                                {% if job.certificate_requirement %}
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h3 class="font-medium text-gray-900 mb-2 flex items-center">
+                                            <i class="fas fa-certificate mr-2 text-yellow-500"></i>
+                                            证书要求
+                                        </h3>
+                                        <p class="text-gray-700">{{ job.certificate_requirement|linebreaks }}</p>
+                                    </div>
+                                {% endif %}
+
+                                <!-- 其他要求 -->
+                                {% if job.other_requirement %}
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h3 class="font-medium text-gray-900 mb-2 flex items-center">
+                                            <i class="fas fa-list mr-2 text-gray-500"></i>
+                                            其他要求
+                                        </h3>
+                                        <p class="text-gray-700">{{ job.other_requirement|linebreaks }}</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- 薪资待遇 -->
+                        {% if job.salary_and_benefits %}
+                            <div>
+                                <h2 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                                    <i class="fas fa-money-bill-wave mr-2 text-green-500"></i>
+                                    薪资待遇
+                                </h2>
+                                <div class="prose max-w-none text-gray-700">
+                                    {{ job.salary_and_benefits|linebreaks }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <!-- Application Sidebar -->
+                    <div class="lg:col-span-1 space-y-6">
+                        <!-- Bookmark Button -->
+                        {% if user.is_authenticated and user.is_job_seeker %}
+                            <div>
+                                <button id="bookmark-btn"
+                                        data-job-id="{{ job.id }}"
+                                        data-is-bookmarked="{{ is_bookmarked|yesno:'true,false' }}"
+                                        class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium transition-colors
                                        {% if is_bookmarked %}
                                        bg-yellow-50 text-yellow-700 border-yellow-300 hover:bg-yellow-100
                                        {% else %}
                                        bg-white text-gray-700 hover:bg-gray-50
                                        {% endif %}">
-                            <i class="{% if is_bookmarked %}fas fa-bookmark text-yellow-500{% else %}far fa-bookmark{% endif %} mr-2"></i>
-                            <span id="bookmark-text">
+                                    <i class="{% if is_bookmarked %}fas fa-bookmark text-yellow-500{% else %}far fa-bookmark{% endif %} mr-2"></i>
+                                    <span id="bookmark-text">
                                 {% if is_bookmarked %}已收藏{% else %}收藏职位{% endif %}
                             </span>
-                        </button>
-                    </div>
-                    {% endif %}
-
-                    <!-- 报名信息 -->
-                    <div class="bg-blue-50 rounded-lg p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                            <i class="fas fa-calendar-check mr-2 text-blue-500"></i>
-                            报名信息
-                        </h3>
-                        
-                        {% if job.job_post.application_start_date and job.job_post.application_end_date %}
-                        <div class="space-y-3">
-                            <div>
-                                <div class="text-sm text-gray-600">报名时间</div>
-                                <div class="font-medium text-gray-900">
-                                    {{ job.job_post.application_start_date|date:"Y年m月d日" }} 至 {{ job.job_post.application_end_date|date:"Y年m月d日" }}
-                                </div>
+                                </button>
                             </div>
-                            
-                            {% if job.registration_methods %}
-                            <div>
-                                <div class="text-sm text-gray-600">报名方式</div>
-                                <div class="text-gray-900">{{ job.registration_methods }}</div>
-                            </div>
-                            {% endif %}
-
-                            {% if job.registration_materials %}
-                            <div>
-                                <div class="text-sm text-gray-600">报名材料</div>
-                                <div class="text-gray-900 text-sm">{{ job.registration_materials|linebreaks }}</div>
-                            </div>
-                            {% endif %}
-                        </div>
-                        {% else %}
-                        <p class="text-gray-600">报名信息待定</p>
                         {% endif %}
-                    </div>
 
-                    <!-- 联系方式 -->
-                    {% if job.contacts or job.contact_methods %}
-                    <div class="bg-green-50 rounded-lg p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                            <i class="fas fa-phone mr-2 text-green-500"></i>
-                            联系方式
-                        </h3>
-                        <div class="space-y-3">
-                            {% if job.contacts %}
-                            <div>
-                                <div class="text-sm text-gray-600">联系人</div>
-                                <div class="text-gray-900">{{ job.contacts }}</div>
-                            </div>
-                            {% endif %}
+                        <!-- 报名信息 -->
+                        <div class="bg-blue-50 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                                <i class="fas fa-calendar-check mr-2 text-blue-500"></i>
+                                报名信息
+                            </h3>
 
-                            {% if job.contact_methods %}
-                            <div>
-                                <div class="text-sm text-gray-600">联系方式</div>
-                                <div class="text-gray-900">{{ job.contact_methods }}</div>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endif %}
-                    
-                    <!-- 申请按钮 -->
-                    <div class="bg-gray-50 rounded-lg p-6">
-                        {% if user.is_authenticated and user.is_job_seeker %}
-                            {% if has_applied %}
-                                <div class="text-center">
-                                    <div class="text-green-600 mb-2">
-                                        <i class="fas fa-check-circle text-3xl"></i>
+                            {% if job.job_post.application_start_date and job.job_post.application_end_date %}
+                                <div class="space-y-3">
+                                    <div>
+                                        <div class="text-sm text-gray-600">报名时间</div>
+                                        <div class="font-medium text-gray-900">
+                                            {{ job.job_post.application_start_date|date:"Y年m月d日" }}
+                                            至 {{ job.job_post.application_end_date|date:"Y年m月d日" }}
+                                        </div>
                                     </div>
-                                    <p class="text-gray-600">您已经申请了这个职位</p>
+
+                                    {% if job.registration_methods %}
+                                        <div>
+                                            <div class="text-sm text-gray-600">报名方式</div>
+                                            <div class="text-gray-900">{{ job.registration_methods }}</div>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if job.registration_materials %}
+                                        <div>
+                                            <div class="text-sm text-gray-600">报名材料</div>
+                                            <div class="text-gray-900 text-sm">{{ job.registration_materials|linebreaks }}</div>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             {% else %}
-                                <form method="POST" action="{% url 'jobs:apply_job' job.id %}">
-                                    {% csrf_token %}
-                                    {{ application_form.as_p }}
-                                    <button type="submit" class="w-full bg-blue-600 text-white rounded-md py-2 px-4 hover:bg-blue-700 transition-colors">
-                                        立即申请
-                                    </button>
-                                </form>
+                                <p class="text-gray-600">报名信息待定</p>
                             {% endif %}
-                        {% elif user.is_authenticated and user.is_employer %}
-                            <p class="text-center text-gray-600">雇主不能申请职位</p>
-                        {% else %}
-                            <div class="text-center">
-                                <p class="mb-4 text-gray-600">请登录以申请此职位</p>
-                                <a href="{% url 'accounts:login' %}" class="block w-full bg-blue-600 text-white rounded-md py-2 px-4 hover:bg-blue-700 transition-colors text-center">
-                                    登录
-                                </a>
+                        </div>
+
+                        <!-- 联系方式 -->
+                        {% if job.contacts or job.contact_methods %}
+                            <div class="bg-green-50 rounded-lg p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                                    <i class="fas fa-phone mr-2 text-green-500"></i>
+                                    联系方式
+                                </h3>
+                                <div class="space-y-3">
+                                    {% if job.contacts %}
+                                        <div>
+                                            <div class="text-sm text-gray-600">联系人</div>
+                                            <div class="text-gray-900">{{ job.contacts }}</div>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if job.contact_methods %}
+                                        <div>
+                                            <div class="text-sm text-gray-600">联系方式</div>
+                                            <div class="text-gray-900">{{ job.contact_methods }}</div>
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
                         {% endif %}
-                    </div>
 
-                    <!-- 岗位基本信息 -->
-                    <div class="bg-gray-50 rounded-lg p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                            <i class="fas fa-info-circle mr-2 text-gray-500"></i>
-                            岗位信息
-                        </h3>
-                        <div class="space-y-3 text-sm">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">发布时间</span>
-                                <span class="text-gray-900">{{ job.created_at|date:"Y年m月d日" }}</span>
-                            </div>
-                            
-                            {% if job.has_staffing_quota is not None %}
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">正式编制</span>
-                                <span class="text-gray-900">
+                        <!-- 申请按钮 -->
+                        <div class="bg-gray-50 rounded-lg p-6">
+                            {% if user.is_authenticated and user.is_job_seeker %}
+                                {% if has_applied %}
+                                    <div class="text-center">
+                                        <div class="text-green-600 mb-2">
+                                            <i class="fas fa-check-circle text-3xl"></i>
+                                        </div>
+                                        <p class="text-gray-600">您已经申请了这个职位</p>
+                                    </div>
+                                {% else %}
+                                    <form method="POST" action="{% url 'jobs:apply_job' job.id %}">
+                                        {% csrf_token %}
+                                        {{ application_form.as_p }}
+                                        <button type="submit"
+                                                class="w-full bg-blue-600 text-white rounded-md py-2 px-4 hover:bg-blue-700 transition-colors">
+                                            立即申请
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            {% elif user.is_authenticated and user.is_employer %}
+                                <p class="text-center text-gray-600">雇主不能申请职位</p>
+                            {% else %}
+                                <div class="text-center">
+                                    <p class="mb-4 text-gray-600">请登录以申请此职位</p>
+                                    <a href="{% url 'accounts:login' %}"
+                                       class="block w-full bg-blue-600 text-white rounded-md py-2 px-4 hover:bg-blue-700 transition-colors text-center">
+                                        登录
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- 岗位基本信息 -->
+                        <div class="bg-gray-50 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                                <i class="fas fa-info-circle mr-2 text-gray-500"></i>
+                                岗位信息
+                            </h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">发布时间</span>
+                                    <span class="text-gray-900">{{ job.created_at|date:"Y年m月d日" }}</span>
+                                </div>
+
+                                {% if job.has_staffing_quota is not None %}
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">正式编制</span>
+                                        <span class="text-gray-900">
                                     {% if job.has_staffing_quota %}是{% else %}否{% endif %}
                                 </span>
-                            </div>
-                            {% endif %}
+                                    </div>
+                                {% endif %}
 
-                            {% if job.is_targeted_recruitment is not None %}
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">定向招聘</span>
-                                <span class="text-gray-900">
+                                {% if job.is_targeted_recruitment is not None %}
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">定向招聘</span>
+                                        <span class="text-gray-900">
                                     {% if job.is_targeted_recruitment %}是{% else %}否{% endif %}
                                 </span>
-                            </div>
-                            {% endif %}
+                                    </div>
+                                {% endif %}
 
-                            {% if job.minimum_service_years_requirement %}
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">服务年限</span>
-                                <span class="text-gray-900">{{ job.minimum_service_years_requirement }}</span>
+                                {% if job.minimum_service_years_requirement %}
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">服务年限</span>
+                                        <span class="text-gray-900">{{ job.minimum_service_years_requirement }}</span>
+                                    </div>
+                                {% endif %}
                             </div>
+
+                            <!-- 定向招聘范围 -->
+                            {% if job.is_targeted_recruitment and job.targeted_recruitment_scope %}
+                                <div class="mt-4 pt-4 border-t border-gray-200">
+                                    <div class="text-sm text-gray-600 mb-2">定向招聘范围</div>
+                                    <div class="text-sm text-gray-700 bg-red-50 border border-red-200 p-3 rounded">
+                                        {{ job.targeted_recruitment_scope|linebreaks }}
+                                    </div>
+                                </div>
                             {% endif %}
                         </div>
-
-                        <!-- 定向招聘范围 -->
-                        {% if job.is_targeted_recruitment and job.targeted_recruitment_scope %}
-                        <div class="mt-4 pt-4 border-t border-gray-200">
-                            <div class="text-sm text-gray-600 mb-2">定向招聘范围</div>
-                            <div class="text-sm text-gray-700 bg-red-50 border border-red-200 p-3 rounded">
-                                {{ job.targeted_recruitment_scope|linebreaks }}
-                            </div>
-                        </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const bookmarkBtn = document.getElementById('bookmark-btn');
-    
-    if (bookmarkBtn) {
-        bookmarkBtn.addEventListener('click', function() {
-            const jobId = this.dataset.jobId;
-            const isBookmarked = this.dataset.isBookmarked === 'true';
-            
-            // Disable button during request
-            this.disabled = true;
-            
-            fetch(`/jobs/${jobId}/bookmark/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update button state
-                    const icon = this.querySelector('i');
-                    const text = this.querySelector('#bookmark-text');
-                    
-                    if (data.is_bookmarked) {
-                        // Now bookmarked
-                        icon.className = 'fas fa-bookmark text-yellow-500 mr-2';
-                        text.textContent = '已收藏';
-                        this.className = this.className.replace('bg-white text-gray-700 hover:bg-gray-50', 'bg-yellow-50 text-yellow-700 border-yellow-300 hover:bg-yellow-100');
-                        this.dataset.isBookmarked = 'true';
-                    } else {
-                        // No longer bookmarked
-                        icon.className = 'far fa-bookmark mr-2';
-                        text.textContent = '收藏职位';
-                        this.className = this.className.replace('bg-yellow-50 text-yellow-700 border-yellow-300 hover:bg-yellow-100', 'bg-white text-gray-700 hover:bg-gray-50');
-                        this.dataset.isBookmarked = 'false';
-                    }
-                    
-                    // Show success message (optional)
-                    showMessage(data.message, 'success');
-                } else {
-                    showMessage(data.message || '操作失败，请重试', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showMessage('网络错误，请重试', 'error');
-            })
-            .finally(() => {
-                // Re-enable button
-                this.disabled = false;
-            });
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const bookmarkBtn = document.getElementById('bookmark-btn');
+
+            if (bookmarkBtn) {
+                bookmarkBtn.addEventListener('click', function () {
+                    const jobId = this.dataset.jobId;
+                    const isBookmarked = this.dataset.isBookmarked === 'true';
+
+                    // Disable button during request
+                    this.disabled = true;
+
+                    fetch(`/jobs/${jobId}/bookmark/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Update button state
+                                const icon = this.querySelector('i');
+                                const text = this.querySelector('#bookmark-text');
+
+                                if (data.is_bookmarked) {
+                                    // Now bookmarked
+                                    icon.className = 'fas fa-bookmark text-yellow-500 mr-2';
+                                    text.textContent = '已收藏';
+                                    this.className = this.className.replace('bg-white text-gray-700 hover:bg-gray-50', 'bg-yellow-50 text-yellow-700 border-yellow-300 hover:bg-yellow-100');
+                                    this.dataset.isBookmarked = 'true';
+                                } else {
+                                    // No longer bookmarked
+                                    icon.className = 'far fa-bookmark mr-2';
+                                    text.textContent = '收藏职位';
+                                    this.className = this.className.replace('bg-yellow-50 text-yellow-700 border-yellow-300 hover:bg-yellow-100', 'bg-white text-gray-700 hover:bg-gray-50');
+                                    this.dataset.isBookmarked = 'false';
+                                }
+
+                                // Show success message (optional)
+                                showMessage(data.message, 'success');
+                            } else {
+                                showMessage(data.message || '操作失败，请重试', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showMessage('网络错误，请重试', 'error');
+                        })
+                        .finally(() => {
+                            // Re-enable button
+                            this.disabled = false;
+                        });
+                });
+            }
         });
-    }
-});
 
-function showMessage(message, type) {
-    // Create a simple toast notification
-    const toast = document.createElement('div');
-    toast.className = `fixed top-20 right-4 px-4 py-2 rounded-md text-white z-50 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
-    toast.textContent = message;
-    
-    document.body.appendChild(toast);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        toast.remove();
-    }, 3000);
-}
-</script>
+        function showMessage(message, type) {
+            // Create a simple toast notification
+            const toast = document.createElement('div');
+            toast.className = `fixed top-20 right-4 px-4 py-2 rounded-md text-white z-50 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            toast.textContent = message;
+
+            document.body.appendChild(toast);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
 {% endblock %} 
