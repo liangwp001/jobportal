@@ -28,9 +28,24 @@ A modern job portal built with Django and Tailwind CSS, designed to connect job 
  Tech Stack
 
 - Backend: Django
-- Frontend: Tailwind CSS, Alpine.js
+- Frontend: Tailwind CSS, DaisyUI, Alpine.js
 - Database: SQLite (default, can be configured for other databases)
 - Icons: Font Awesome
+
+## 开发规则
+
+本项目遵循严格的开发规则和标准，确保代码质量和项目一致性。详细规则请参考：
+
+- [项目规则总览](PROJECT_RULES.md) - 完整的项目开发规则
+- [规则目录](rules/) - 分类的规则文件
+- [.cursorrules](.cursorrules) - Cursor AI 规则配置
+
+### 核心规则摘要
+1. **架构**: 使用Django应用模块化架构，apps/目录组织
+2. **模板**: 扩展base.html，使用TailwindCSS+DaisyUI，禁止自定义CSS
+3. **安全**: 启用CSRF，邮箱验证，频率限制
+4. **国际化**: 中文界面，zh-hans语言，Asia/Shanghai时区
+5. **开发**: 遵循PEP 8，Django最佳实践，完整测试覆盖
 
  Installation
 
