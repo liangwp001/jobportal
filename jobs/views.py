@@ -1,14 +1,14 @@
 from django.shortcuts import render
 from django.contrib import messages
-from apps.jobs.models import Job
+from apps.jobs.models import JobInfo
 
 def job_list(request):
-    jobs = Job.objects.filter(is_active=True)
+    jobs = JobInfo.objects.filter(is_active=True)
     
     # Handle category filter
-    category_id = request.GET.get('category')
-    if category_id:
-        jobs = jobs.filter(category_id=category_id)
+    category = request.GET.get('category')
+    if category:
+        jobs = jobs.filter(category=category)
         
         # If no jobs found for category
         if not jobs.exists():

@@ -23,26 +23,61 @@
         </div>
         
         <!-- Categories Grid -->
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for category in categories %}
-            <a href="{% url 'jobs:job_list' %}?category={{ category.id }}" 
+            <a href="{% url 'jobs:job_list' %}?category={{ category.category_value }}" 
                class="group relative overflow-hidden">
-                <div class="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100/50 
+                <div class="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-100/50 
                             transition-all duration-300 ease-out
                             hover:shadow-2xl hover:scale-[1.02] hover:border-blue-200/50">
-                    <div class="relative mb-6">
-                        <div class="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-indigo-600 
+                    <div class="relative mb-4">
+                        <div class="w-14 h-14 mx-auto bg-gradient-to-br from-blue-500 to-indigo-600 
                                   rounded-xl flex items-center justify-center transform 
                                   transition-all duration-300 group-hover:rotate-6 group-hover:scale-110">
-                            <i class="{{ category.icon }} text-2xl text-white"></i>
+                            <i class="fas fa-briefcase text-xl text-white"></i>
                         </div>
                     </div>
                     <div class="text-center">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">{{ category.name }}</h3>
-                        <span class="inline-flex items-center px-4 py-1 rounded-full text-sm font-medium
-                                   bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-colors">
-                            {{ category.job_count }} 个职位
-                        </span>
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">{{ category.category }}</h3>
+                        
+                        <!-- 统计信息 -->
+                        <div class="space-y-3">
+                            <!-- 总数量 -->
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">总招聘公告:</span>
+                                <span class="font-semibold text-gray-900">{{ category.total_posts }}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">总岗位数:</span>
+                                <span class="font-semibold text-gray-900">{{ category.total_jobs }}</span>
+                            </div>
+                            
+                            <!-- 最近7天 -->
+                            <div class="border-t pt-2">
+                                <div class="text-xs text-gray-500 mb-1">最近7天</div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-600">新增公告:</span>
+                                    <span class="font-semibold text-blue-600">{{ category.recent_posts }}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-600">新增岗位:</span>
+                                    <span class="font-semibold text-blue-600">{{ category.recent_jobs }}</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 今天新增 -->
+                            <div class="border-t pt-2">
+                                <div class="text-xs text-gray-500 mb-1">今天新增</div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-600">新增公告:</span>
+                                    <span class="font-semibold text-green-600">{{ category.today_posts }}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-600">新增岗位:</span>
+                                    <span class="font-semibold text-green-600">{{ category.today_jobs }}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </a>

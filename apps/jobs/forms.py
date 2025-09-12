@@ -1,17 +1,16 @@
 from django import forms
-from .models import Job, Application
+from .models import JobInfo, JobPost, Application, PublicInstitutionJobCategory
 
 class JobForm(forms.ModelForm):
     class Meta:
-        model = Job
+        model = JobInfo
         fields = [
-            'title', 'category', 'description', 'requirements',
-            'location', 'salary', 'job_type', 'deadline'
+            'job_title', 'category', 'job_responsibilities', 'other_requirement',
+            'job_location', 'salary_and_benefits', 'employment_type'
         ]
         widgets = {
-            'deadline': forms.DateInput(attrs={'type': 'date'}),
-            'description': forms.Textarea(attrs={'rows': 4}),
-            'requirements': forms.Textarea(attrs={'rows': 4}),
+            'job_responsibilities': forms.Textarea(attrs={'rows': 4}),
+            'other_requirement': forms.Textarea(attrs={'rows': 4}),
         }
 
 class JobApplicationForm(forms.ModelForm):
@@ -31,13 +30,21 @@ class JobSearchForm(forms.Form):
     location = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'placeholder': 'Location'}
     ))
-    category = forms.ChoiceField(required=False)
+    category = forms.ChoiceField(
+        required=False,
+        choices=[('', 'All Categories')] + [(tag.value, tag.value) for tag in PublicInstitutionJobCategory]
+    )
     job_type = forms.ChoiceField(
         required=False,
-        choices=[('', 'All Types')] + Job.JOB_TYPE_CHOICES
+        choices=[('', 'All Types')] + [('事业编', '事业编'), ('劳务派遣', '劳务派遣'), ('人事代理', '人事代理'), ('合同制', '合同制')]
     )
 
 class JobPostForm(forms.ModelForm):
     class Meta:
-        model = Job
-        fields = ['title', 'description', 'location', 'salary', 'job_type']
+        model = JobPost
+        fields = ['title', 'organization', 'publish_date', 'application_start_date', 'application_end_date', 'category']
+        widgets = {
+            'publish_date': forms.DateInput(attrs={'type': 'date'}),
+            'application_start_date': forms.DateInput(attrs={'type': 'date'}),
+            'application_end_date': forms.DateInput(attrs={'type': 'date'}),
+        }

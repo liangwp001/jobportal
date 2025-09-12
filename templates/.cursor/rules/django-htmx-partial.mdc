@@ -1,0 +1,8 @@
+---
+description: 实现局部刷新时，应使用 HTMX 属性（hx-get, hx-target, hx-swap）与模板 partials
+globs: ["**/*.html"]
+alwaysApply: false
+---
+
+- 在触发局部刷新或 AJAX 行为时，使用 HTMX（如 hx-get、hx-post、hx-target、hx-swap）。
+- 后端视图应使用 django-template-partials 返回模板片段，仅包含必要 HTML 片段。

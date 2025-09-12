@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from apps.jobs.models import Job, Application, JobBookmark, JobBrowseHistory
+from apps.jobs.models import JobInfo, JobPost, Application, JobBookmark, JobBrowseHistory
 from django.shortcuts import render
 
 def home(request):
@@ -13,9 +13,9 @@ def employer_dashboard(request):
         messages.error(request, "Access denied. Employer account required.")
         return redirect('jobs:home')
     
-    posted_jobs = Job.objects.filter(employer=request.user.employer)
+    posted_jobs = JobInfo.objects.filter(organization=request.user.employer.company_name)
     recent_applications = Application.objects.filter(
-        job__employer=request.user.employer
+        job_info__organization=request.user.employer.company_name
     ).order_by('-applied_date')[:5]
     
     context = {
@@ -23,7 +23,7 @@ def employer_dashboard(request):
         'recent_applications': recent_applications,
         'total_jobs': posted_jobs.count(),
         'total_applications': Application.objects.filter(
-            job__employer=request.user.employer
+            job_info__organization=request.user.employer.company_name
         ).count(),
     }
     return render(request, 'dashboard/employer_dashboard.html', context)
@@ -45,15 +45,15 @@ def job_seeker_dashboard(request):
     # 获取浏览历史，去重并限制数量
     browse_history = JobBrowseHistory.objects.filter(
         job_seeker=request.user.jobseeker
-    ).select_related('job').order_by('-browsed_date')[:20]  # 限制显示最近20条
+    ).select_related('job_info').order_by('-browsed_date')[:20]  # 限制显示最近20条
     
     # 去重处理，只显示每个职位最近一次浏览
     seen_jobs = set()
     unique_browse_history = []
     for history in browse_history:
-        if history.job.id not in seen_jobs:
+        if history.job_info.id not in seen_jobs:
             unique_browse_history.append(history)
-            seen_jobs.add(history.job.id)
+            seen_jobs.add(history.job_info.id)
     
     context = {
         'applications': applications,
@@ -75,7 +75,7 @@ def manage_application(request, application_id):
     
     application = Application.objects.get(
         id=application_id,
-        job__employer=request.user.employer
+        job_info__organization=request.user.employer.company_name
     )
     
     if request.method == 'POST':

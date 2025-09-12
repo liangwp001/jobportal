@@ -1,0 +1,8 @@
+---
+description: Django 模板应扩展 base.html 并使用 Django 模板语法；局部模板不应 extend base.html
+globs: ["**/*.html"]
+alwaysApply: false
+---
+
+- 所有页面模板应使用 `{% extends "base.html" %}` 与 `{% block content %}` 结构。
+- 局部刷新模板（partials）不得包含 `extends`，仅包含 HTML 片段。

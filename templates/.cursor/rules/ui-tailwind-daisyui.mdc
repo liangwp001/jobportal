@@ -1,0 +1,9 @@
+---
+description: 强制在 Django 模板中使用 TailwindCSS 和 DaisyUI；禁止自定义 CSS 文件或 inline 样式
+globs: ["**/*.html"]
+alwaysApply: false
+---
+
+- 在 Django 模板中，优先使用 Tailwind 工具类和 DaisyUI 组件类（如 btn, card, navbar 等）。
+- 禁止使用 `<style>` 或自定义 CSS 文件，除非绝对必要。
+- 假定 `base.html` 已预先包含 Tailwind 与 DaisyUI 的依赖。

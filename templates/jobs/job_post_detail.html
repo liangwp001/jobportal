@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ job_post.title }} - 招聘公告{% endblock %}
+
+{% block content %}
+<main class="pt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- 招聘公告头部 -->
+        <div class="bg-white shadow rounded-lg mb-8">
+            <div class="p-6 border-b border-gray-200">
+                <!-- 招聘公告分类和标题 -->
+                <div class="mb-4">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ job_post.title }}</h1>
+                </div>
+
+                <!-- 招聘单位信息 -->
+                <div class="mb-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <!-- 招聘单位和发布时间 -->
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                            <div class="flex items-center text-gray-600">
+                                <i class="fas fa-building mr-2"></i>
+                                <span class="text-lg font-medium">{{ job_post.organization|default:"招聘单位待定" }}</span>
+                            </div>
+                            {% if job_post.publish_date %}
+                            <div class="flex items-center text-gray-600">
+                                <i class="fas fa-calendar mr-2 text-blue-500"></i>
+                                <span>发布时间: {{ job_post.publish_date|date:"Y年m月d日" }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- 查看原文按钮 -->
+                        {% if job_post.source_url %}
+                        <div class="flex items-center">
+                            <a href="{{ job_post.source_url }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors shadow-sm">
+                                <i class="fas fa-external-link-alt mr-1.5 text-xs"></i>
+                                查看原文
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- 岗位分布标签 -->
+                {% if category_stats %}
+                <div class="mt-4">
+                    <div class="flex flex-wrap gap-2">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-blue-800 border border-gray-200">
+                            <i class="fas fa-briefcase mr-1.5 text-gray-500"></i>
+                            {{ job_post.category }}
+                        </span>
+                        {% for stat in category_stats %}
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800 border border-gray-200">
+                            <i class="fas fa-briefcase mr-1.5 text-gray-500"></i>
+                            {{ stat.category|default:"未分类" }} ({{ stat.count }})
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- 报名状态 -->
+                <div class="mt-4 flex flex-col sm:flex-row gap-4">
+                    {% if job_post.application_start_date and job_post.application_end_date %}
+                    <div class="flex-1 p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-sm text-gray-600 mb-1">报名状态</div>
+                                <div class="text-lg font-semibold text-gray-900">
+                                    {{ job_post.application_start_date|date:"Y年m月d日" }} 至 {{ job_post.application_end_date|date:"Y年m月d日" }}
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                {% if job_post.application_end_date < today %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                                        <i class="fas fa-times-circle mr-1"></i>
+                                        已截止
+                                    </span>
+                                {% elif job_post.application_start_date > today %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                                        <i class="fas fa-clock mr-1"></i>
+                                        未开始
+                                    </span>
+                                {% else %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                        <i class="fas fa-check-circle mr-1"></i>
+                                        报名中
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Tab 页面 -->
+        <div class="bg-white shadow rounded-lg">
+            <!-- Tab 导航 -->
+            <div class="border-b border-gray-200">
+                <nav class="flex space-x-8 px-6" aria-label="Tabs">
+                    <button id="tab-announcement"
+                            class="tab-button active py-4 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600"
+                            onclick="switchTab('announcement')">
+                        <i class="fas fa-file-text mr-2"></i>
+                        公告正文
+                    </button>
+                    <button id="tab-jobs"
+                            class="tab-button py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                            onclick="switchTab('jobs')">
+                        <i class="fas fa-list mr-2"></i>
+                        岗位列表 ({{ total_jobs }} 个)
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Tab 内容 -->
+            <div class="p-6">
+                <!-- 公告正文 Tab -->
+                <div id="content-announcement" class="tab-content">
+                    <div class="prose max-w-none">
+                        {% if job_post.html_text %}
+                            {{ job_post.html_text|safe }}
+                        {% else %}
+                            <div class="text-center py-12">
+                                <div class="text-gray-500">
+                                    <i class="fas fa-file-alt text-4xl mb-4"></i>
+                                    <p>暂无公告正文内容</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- 岗位列表 Tab -->
+                <div id="content-jobs" class="tab-content hidden">
+                    {% if jobs %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {% for job in jobs %}
+                        <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-200 hover:shadow-md transition-all duration-300">
+                            <!-- 岗位标题和单位 -->
+                            <div class="mb-3">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-1">
+                                    <a href="{% url 'jobs:job_detail' job.id %}" class="hover:text-blue-600 transition-colors">
+                                        {{ job.job_title|default:"岗位名称待定" }}
+                                    </a>
+                                </h3>
+                                <p class="text-gray-600 text-sm">
+                                    <i class="fas fa-building mr-1"></i>
+                                    {{ job.organization|default:"招聘单位待定" }}
+                                </p>
+                            </div>
+
+                            <!-- 岗位信息 -->
+                            <div class="space-y-2 mb-4">
+                                {% if job.job_location %}
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>
+                                    <span>{{ job.job_location }}</span>
+                                </div>
+                                {% endif %}
+
+                                {% if job.num_positions %}
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <i class="fas fa-users mr-2 text-green-500"></i>
+                                    <span>招聘 {{ job.num_positions }} 人</span>
+                                </div>
+                                {% endif %}
+
+                                {% if job.employment_type %}
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <i class="fas fa-briefcase mr-2 text-purple-500"></i>
+                                    <span>{{ job.employment_type }}</span>
+                                </div>
+                                {% endif %}
+
+                                {% if job.category %}
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <i class="fas fa-tag mr-2 text-orange-500"></i>
+                                    <span>{{ job.category }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- 任职要求预览 -->
+                            <div class="mb-4">
+                                {% if job.degree_requirement %}
+                                <div class="text-sm text-gray-600 mb-1">学历要求</div>
+                                <div class="text-sm text-gray-800">{{ job.degree_requirement|truncatewords:8 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- 查看详情按钮 -->
+                            <div class="flex justify-end">
+                                <a href="{% url 'jobs:job_detail' job.id %}"
+                                   class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                                    查看详情
+                                    <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-12">
+                        <div class="text-gray-500">
+                            <i class="fas fa-inbox text-4xl mb-4"></i>
+                            <p>暂无岗位信息</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+function switchTab(tabName) {
+    // 隐藏所有tab内容
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabContents.forEach(content => {
+        content.classList.add('hidden');
+    });
+
+    // 移除所有tab按钮的active状态
+    const tabButtons = document.querySelectorAll('.tab-button');
+    tabButtons.forEach(button => {
+        button.classList.remove('active', 'border-blue-500', 'text-blue-600');
+        button.classList.add('border-transparent', 'text-gray-500');
+    });
+
+    // 显示选中的tab内容
+    const activeContent = document.getElementById('content-' + tabName);
+    if (activeContent) {
+        activeContent.classList.remove('hidden');
+    }
+
+    // 激活选中的tab按钮
+    const activeButton = document.getElementById('tab-' + tabName);
+    if (activeButton) {
+        activeButton.classList.add('active', 'border-blue-500', 'text-blue-600');
+        activeButton.classList.remove('border-transparent', 'text-gray-500');
+    }
+}
+
+// 页面加载时确保第一个tab正确显示
+document.addEventListener('DOMContentLoaded', function() {
+    // 直接调用switchTab函数来初始化
+    switchTab('announcement');
+});
+</script>
+
+<style>
+.tab-button {
+    transition: all 0.2s ease-in-out;
+}
+
+.tab-button:hover {
+    color: #374151;
+    border-color: #d1d5db;
+}
+
+.tab-button.active {
+    color: #2563eb;
+    border-color: #2563eb;
+}
+
+.tab-content {
+    transition: opacity 0.2s ease-in-out;
+}
+</style>
+
+{% endblock %}

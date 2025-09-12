@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}招聘公告测试页面{% endblock %}
+
+{% block content %}
+<main class="pt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="bg-white shadow rounded-lg">
+            <div class="p-6">
+                <h1 class="text-3xl font-bold text-gray-900 mb-6">招聘公告测试页面</h1>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for job_post in job_posts %}
+                    <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-200 hover:shadow-md transition-all duration-300">
+                        <div class="mb-3">
+                            <div class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mb-2">
+                                {{ job_post.category }}
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                                <a href="{% url 'jobs:job_post_detail' job_post.id %}" class="hover:text-blue-600 transition-colors">
+                                    {{ job_post.title }}
+                                </a>
+                            </h3>
+                        </div>
+                        
+                        <div class="space-y-2 text-sm text-gray-600 mb-4">
+                            <div>
+                                <i class="fas fa-building mr-1"></i>
+                                {{ job_post.organization }}
+                            </div>
+                            {% if job_post.publish_date %}
+                            <div>
+                                <i class="fas fa-calendar mr-1"></i>
+                                发布时间: {{ job_post.publish_date|date:"Y-m-d" }}
+                            </div>
+                            {% endif %}
+                            {% if job_post.application_start_date and job_post.application_end_date %}
+                            <div>
+                                <i class="fas fa-calendar-check mr-1"></i>
+                                报名时间: {{ job_post.application_start_date|date:"Y-m-d" }} 至 {{ job_post.application_end_date|date:"Y-m-d" }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div class="text-xs text-gray-500">
+                                ID: {{ job_post.id }}
+                            </div>
+                            <a href="{% url 'jobs:job_post_detail' job_post.id %}" 
+                               class="inline-flex items-center px-3 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors">
+                                查看详情
+                                <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

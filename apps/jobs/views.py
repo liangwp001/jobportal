@@ -5,27 +5,59 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from .models import Job, Application, Category, JobBookmark, JobBrowseHistory
+from .models import JobInfo, JobPost, Application, JobBookmark, JobBrowseHistory
 from .forms import JobForm, JobApplicationForm, JobSearchForm, JobPostForm
 from django.shortcuts import render
-from .models import Category
 from apps.accounts.models import Employer
+
 
 def companies(request):
     companies = Employer.objects.all()
     return render(request, 'jobs/companies.html', {'companies': companies})
+
+
 def home(request):
-    featured_jobs = Job.objects.filter(is_active=True)[:6]
-    categories = Category.objects.all()
+    featured_jobs = JobInfo.objects.filter(is_active=True)[:6]
+    # 获取所有可用的岗位类别及其数量（按JobPost的category统计）
+    categories_data = []
+
+    for category_choice in JobPost.category.field.choices:
+        category_value = category_choice[0]
+        category_display = category_choice[1]
+
+        # 获取该分类下的所有招聘公告
+        job_posts = JobPost.objects.filter(
+            category=category_value,
+            is_active=True
+        )
+
+        # 统计岗位数量
+        job_count = JobInfo.objects.filter(
+            job_post__in=job_posts,
+            is_active=True
+        ).count()
+
+        # 只显示有数据的分类
+        if job_count > 0:
+            categories_data.append({
+                'category': category_display,
+                'category_value': category_value,
+                'job_count': job_count,
+            })
+
+    # 按岗位数量排序
+    categories_data.sort(key=lambda x: x['job_count'], reverse=True)
+
     context = {
         'featured_jobs': featured_jobs,
-        'categories': categories,
+        'categories': categories_data,
     }
     return render(request, 'jobs/home.html', context)
 
+
 def job_list(request):
     form = JobSearchForm(request.GET)
-    jobs = Job.objects.filter(is_active=True)
+    jobs = JobInfo.objects.filter(is_active=True)
 
     if form.is_valid():
         search = form.cleaned_data.get('search')
@@ -35,15 +67,16 @@ def job_list(request):
 
         if search:
             jobs = jobs.filter(
-                Q(title__icontains=search) |
-                Q(description__icontains=search)
+                Q(job_title__icontains=search) |
+                Q(job_responsibilities__icontains=search)
             )
         if location:
-            jobs = jobs.filter(location__icontains=location)
+            jobs = jobs.filter(job_location__icontains=location)
         if category:
-            jobs = jobs.filter(category=category)
+            # 按JobPost的category进行筛选
+            jobs = jobs.filter(job_post__category=category)
         if job_type:
-            jobs = jobs.filter(job_type=job_type)
+            jobs = jobs.filter(employment_type=job_type)
 
     paginator = Paginator(jobs, 9)  # 9 jobs per page
     page = request.GET.get('page')
@@ -55,23 +88,24 @@ def job_list(request):
     }
     return render(request, 'jobs/job_list.html', context)
 
+
 def job_detail(request, job_id):
     import logging
     logger = logging.getLogger(__name__)
-    
-    job = get_object_or_404(Job, id=job_id, is_active=True)
+
+    job = get_object_or_404(JobInfo, id=job_id, is_active=True)
     application_form = JobApplicationForm() if request.user.is_authenticated else None
     has_applied = False
     is_bookmarked = False
 
     if request.user.is_authenticated and hasattr(request.user, 'jobseeker'):
         has_applied = Application.objects.filter(
-            job=job, job_seeker=request.user.jobseeker
+            job_info=job, job_seeker=request.user.jobseeker
         ).exists()
         is_bookmarked = JobBookmark.objects.filter(
-            job=job, job_seeker=request.user.jobseeker
+            job_info=job, job_seeker=request.user.jobseeker
         ).exists()
-        
+
         # 记录浏览历史
         try:
             # 获取用户IP地址
@@ -80,20 +114,20 @@ def job_detail(request, job_id):
                 ip_address = x_forwarded_for.split(',')[0]
             else:
                 ip_address = request.META.get('REMOTE_ADDR')
-            
+
             # 获取用户代理
             user_agent = request.META.get('HTTP_USER_AGENT', '')
-            
+
             # 创建浏览历史记录
             JobBrowseHistory.objects.create(
-                job=job,
+                job_info=job,
                 job_seeker=request.user.jobseeker,
                 ip_address=ip_address,
                 user_agent=user_agent
             )
-            
+
             logger.info(f"Browse history recorded for job {job_id} by user {request.user.username}")
-            
+
         except Exception as e:
             logger.error(f"Error recording browse history: {str(e)}", exc_info=True)
 
@@ -105,11 +139,12 @@ def job_detail(request, job_id):
     }
     return render(request, 'jobs/job_detail.html', context)
 
+
 @login_required
 def post_job(request):
     if not hasattr(request.user, 'employer'):
         return redirect('home')
-        
+
     if request.method == 'POST':
         form = JobPostForm(request.POST)
         if form.is_valid():
@@ -123,15 +158,16 @@ def post_job(request):
 
     return render(request, 'jobs/post_job.html', {'form': form})
 
+
 @login_required
 def apply_job(request, job_id):
     if not request.user.is_job_seeker:
         messages.error(request, "Only job seekers can apply for jobs.")
         return redirect('jobs:job_detail', job_id=job_id)
 
-    job = get_object_or_404(Job, id=job_id, is_active=True)
-    
-    if Application.objects.filter(job=job, job_seeker=request.user.jobseeker).exists():
+    job = get_object_or_404(JobInfo, id=job_id, is_active=True)
+
+    if Application.objects.filter(job_info=job, job_seeker=request.user.jobseeker).exists():
         messages.info(request, "You have already applied for this job.")
         return redirect('jobs:job_detail', job_id=job_id)
 
@@ -139,7 +175,7 @@ def apply_job(request, job_id):
         form = JobApplicationForm(request.POST)
         if form.is_valid():
             application = form.save(commit=False)
-            application.job = job
+            application.job_info = job
             application.job_seeker = request.user.jobseeker
             application.save()
             messages.success(request, "Application submitted successfully!")
@@ -147,9 +183,10 @@ def apply_job(request, job_id):
 
     return redirect('jobs:job_detail', job_id=job_id)
 
+
 def search_jobs(request):
     form = JobSearchForm(request.GET)
-    jobs = Job.objects.filter(is_active=True)
+    jobs = JobInfo.objects.filter(is_active=True)
 
     if form.is_valid():
         search = form.cleaned_data.get('search')
@@ -159,15 +196,16 @@ def search_jobs(request):
 
         if search:
             jobs = jobs.filter(
-                Q(title__icontains=search) |
-                Q(description__icontains=search)
+                Q(job_title__icontains=search) |
+                Q(job_responsibilities__icontains=search)
             )
         if location:
-            jobs = jobs.filter(location__icontains=location)
+            jobs = jobs.filter(job_location__icontains=location)
         if category:
-            jobs = jobs.filter(category=category)
+            # 按JobPost的category进行筛选
+            jobs = jobs.filter(job_post__category=category)
         if job_type:
-            jobs = jobs.filter(job_type=job_type)
+            jobs = jobs.filter(employment_type=job_type)
 
     paginator = Paginator(jobs, 9)  # 9 jobs per page
     page = request.GET.get('page')
@@ -179,22 +217,119 @@ def search_jobs(request):
     }
     return render(request, 'jobs/search_results.html', context)
 
+
 def categories(request):
-    categories = Category.objects.all()
+    from django.db.models import Count, Q
+    from django.utils import timezone
+    from datetime import timedelta
+
+    # 获取时间范围
+    today = timezone.now().date()
+    seven_days_ago = today - timedelta(days=7)
+
+    # 按JobPostCategory分类统计
+    categories_data = []
+
+    for category_choice in JobPost.category.field.choices:
+        category_value = category_choice[0]
+        category_display = category_choice[1]
+
+        # 获取该分类下的所有招聘公告
+        job_posts = JobPost.objects.filter(
+            category=category_value,
+            is_active=True
+        )
+
+        # 统计总数量
+        total_posts = job_posts.count()
+        total_jobs = JobInfo.objects.filter(
+            job_post__in=job_posts,
+            is_active=True
+        ).count()
+
+        # 统计最近7天数量
+        recent_posts = job_posts.filter(
+            created_at__date__gte=seven_days_ago
+        )
+        recent_posts_count = recent_posts.count()
+        recent_jobs_count = JobInfo.objects.filter(
+            job_post__in=recent_posts,
+            is_active=True
+        ).count()
+
+        # 统计今天新增数量
+        today_posts = job_posts.filter(
+            created_at__date=today
+        )
+        today_posts_count = today_posts.count()
+        today_jobs_count = JobInfo.objects.filter(
+            job_post__in=today_posts,
+            is_active=True
+        ).count()
+
+        # 只显示有数据的分类
+        if total_posts > 0:
+            categories_data.append({
+                'category': category_display,
+                'category_value': category_value,
+                'total_posts': total_posts,
+                'total_jobs': total_jobs,
+                'recent_posts': recent_posts_count,
+                'recent_jobs': recent_jobs_count,
+                'today_posts': today_posts_count,
+                'today_jobs': today_jobs_count,
+            })
+
+    # 按总招聘公告数量排序
+    categories_data.sort(key=lambda x: x['total_posts'], reverse=True)
+
     context = {
-        'categories': categories,
+        'categories': categories_data,
     }
     return render(request, 'jobs/categories.html', context)
 
+
 def company_detail(request, pk):
     company = get_object_or_404(Employer, pk=pk)
-    active_jobs = Job.objects.filter(employer=company, is_active=True)
+    active_jobs = JobInfo.objects.filter(organization=company.company_name, is_active=True)
     
     context = {
         'company': company,
         'active_jobs': active_jobs,
     }
     return render(request, 'jobs/company_detail.html', context)
+
+def job_post_detail(request, job_post_id):
+    """招聘公告详情页面"""
+    job_post = get_object_or_404(JobPost, id=job_post_id, is_active=True)
+    
+    # 获取该招聘公告下的所有岗位
+    jobs = JobInfo.objects.filter(job_post=job_post, is_active=True)
+    
+    # 统计岗位数量
+    total_jobs = jobs.count()
+    
+    # 按岗位类别分组统计
+    from django.db.models import Count
+    category_stats = jobs.values('category').annotate(count=Count('id')).order_by('-count')
+    
+    context = {
+        'job_post': job_post,
+        'jobs': jobs,
+        'total_jobs': total_jobs,
+        'category_stats': category_stats,
+    }
+    return render(request, 'jobs/job_post_detail.html', context)
+
+def test_job_posts(request):
+    """测试页面 - 显示所有招聘公告"""
+    job_posts = JobPost.objects.filter(is_active=True).order_by('-created_at')
+    
+    context = {
+        'job_posts': job_posts,
+    }
+    return render(request, 'jobs/test_job_posts.html', context)
+
 
 @login_required
 @require_POST
@@ -204,27 +339,27 @@ def toggle_bookmark(request, job_id):
     """
     import logging
     logger = logging.getLogger(__name__)
-    
+
     try:
         logger.info(f"Bookmark toggle request for job {job_id} by user {request.user.username}")
-        
+
         if not hasattr(request.user, 'jobseeker'):
             logger.warning(f"User {request.user.username} is not a jobseeker")
             return JsonResponse({
-                'success': False, 
+                'success': False,
                 'message': '只有求职者可以收藏职位'
             })
-        
-        job = get_object_or_404(Job, id=job_id, is_active=True)
+
+        job = get_object_or_404(JobInfo, id=job_id, is_active=True)
         job_seeker = request.user.jobseeker
-        
-        logger.info(f"Job found: {job.title}, JobSeeker: {job_seeker.user.username}")
-        
+
+        logger.info(f"Job found: {job.job_title}, JobSeeker: {job_seeker.user.username}")
+
         bookmark, created = JobBookmark.objects.get_or_create(
-            job=job, 
+            job_info=job,
             job_seeker=job_seeker
         )
-        
+
         if not created:
             # Bookmark exists, remove it
             bookmark.delete()
@@ -236,16 +371,16 @@ def toggle_bookmark(request, job_id):
             is_bookmarked = True
             message = '已添加到收藏'
             logger.info(f"Bookmark created for job {job_id}")
-        
+
         response_data = {
             'success': True,
             'is_bookmarked': is_bookmarked,
             'message': message
         }
-        
+
         logger.info(f"Bookmark toggle response: {response_data}")
         return JsonResponse(response_data)
-        
+
     except Exception as e:
         logger.error(f"Error in toggle_bookmark: {str(e)}", exc_info=True)
         return JsonResponse({
